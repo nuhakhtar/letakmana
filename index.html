@@ -13,9 +13,9 @@
 
         body {
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
-            /* Fallback gradient + background image */
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-image: url('background.png'); /* Make sure this file exists! */
+            /* Multiple fallbacks */
+            background-color: #667eea;
+            background-image: url('background.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -27,7 +27,7 @@
             position: relative;
         }
 
-        /* Dark overlay for background - adjust opacity (0.3 = lighter, 0.7 = darker) */
+        /* Dark overlay - ADJUST THIS VALUE: 0.0 = no dark, 1.0 = completely black */
         body::before {
             content: '';
             position: fixed;
@@ -35,7 +35,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.4); /* 40% dark - adjust this value */
+            background: rgba(0, 0, 0, 0.3); /* 30% dark - change to 0.2 for lighter or 0.5 for darker */
             pointer-events: none;
             z-index: 0;
         }
@@ -267,6 +267,21 @@
     </div>
 
     <script>
+        // Check if background image loads
+        window.addEventListener('load', function() {
+            const bgImage = new Image();
+            bgImage.onload = function() {
+                console.log('✅ Background image loaded successfully!');
+            };
+            bgImage.onerror = function() {
+                console.error('❌ Background image NOT found! Make sure:');
+                console.error('1. File is named "background.png" (case-sensitive)');
+                console.error('2. File is in the SAME folder as index.html');
+                console.error('3. File path is correct');
+            };
+            bgImage.src = 'background.png';
+        });
+
         /* ============================================
            CONFIGURATION - EASY TO EDIT
            ============================================ */
