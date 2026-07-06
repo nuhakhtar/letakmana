@@ -13,17 +13,21 @@
 
         body {
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
-            background-image: url('background.jpg'); /* REPLACE with your image path */
+            /* Fallback gradient + background image */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-image: url('background.png'); /* Make sure this file exists! */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            background-repeat: no-repeat;
             overflow: hidden;
             touch-action: none;
             height: 100vh;
             width: 100vw;
+            position: relative;
         }
 
-        /* Dark overlay for background */
+        /* Dark overlay for background - adjust opacity (0.3 = lighter, 0.7 = darker) */
         body::before {
             content: '';
             position: fixed;
@@ -31,7 +35,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.5); /* Darken the background */
+            background: rgba(0, 0, 0, 0.4); /* 40% dark - adjust this value */
             pointer-events: none;
             z-index: 0;
         }
