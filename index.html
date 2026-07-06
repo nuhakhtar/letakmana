@@ -3,77 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Where Does It Go? 🗑️</title>
+    <title>Sorting Game 🎮</title>
     <style>
-        /* --- GENERAL STYLES --- */
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
-            background: linear-gradient(135deg, #FDEFF4 0%, #E0F7FA 100%);
-            overflow: hidden; /* Prevents scrolling while dragging */
-            touch-action: none; /* Prevents mobile browser pull-to-refresh */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            touch-action: none;
             height: 100vh;
             width: 100vw;
         }
 
-        h1 {
+        /* Decorative background elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* --- HEADER --- */
+        #header {
             text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
             color: #FF6B6B;
-            font-size: 2.5rem;
-            margin-top: 20px;
-            text-shadow: 2px 2px 0px #FFF;
-            pointer-events: none; /* Lets clicks pass through to objects behind text */
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        #level-indicator {
+            font-size: 1.3rem;
+            color: #4ECDC4;
+            font-weight: bold;
         }
 
         /* --- GAME AREA --- */
         #game-area {
             position: relative;
             width: 100%;
-            height: 85vh;
-            max-width: 1000px;
+            height: calc(100vh - 100px);
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* --- ZONES (The 4 targets) --- */
+        /* --- ZONES --- */
         .zone {
             position: absolute;
-            width: 25vmin; /* Responsive size based on screen */
-            height: 25vmin;
-            border-radius: 30px;
+            width: 22vmin;
+            height: 22vmin;
+            border-radius: 25px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 5vmin;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.2s;
             border: 4px dashed rgba(255,255,255,0.8);
         }
 
         .zone span.label {
+            position: absolute;
+            bottom: 15px;
             font-size: 2.5vmin;
-            margin-top: 10px;
             color: #555;
             font-weight: bold;
+            background: rgba(255,255,255,0.9);
+            padding: 5px 15px;
+            border-radius: 15px;
         }
 
         /* Zone Positions */
-        #zone-mouth { top: 10%; left: 5%; background-color: #FFD1DC; } /* Top Left */
-        #zone-bag   { top: 10%; right: 5%; background-color: #C1E1C1; } /* Top Right */
-        #zone-bush  { top: 50%; left: 5%; transform: translateY(-50%); background-color: #AEC6CF; } /* Middle Left */
-        #zone-bin   { top: 50%; right: 5%; transform: translateY(-50%); background-color: #FDFD96; } /* Middle Right (Correct) */
+        #zone-1 { top: 8%; left: 5%; }
+        #zone-2 { top: 8%; right: 5%; }
+        #zone-3 { top: 55%; left: 5%; }
+        #zone-4 { top: 55%; right: 5%; }
 
-        /* Hover/Active effect for zones */
         .zone.hover {
-            transform: scale(1.1);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            transform: scale(1.15);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
             border-color: #FF6B6B;
+            border-style: solid;
+            z-index: 5;
         }
-        
-        /* Fix transform for middle zones when hovering */
-        #zone-bush.hover { transform: translateY(-50%) scale(1.1); }
-        #zone-bin.hover  { transform: translateY(-50%) scale(1.1); }
 
         /* --- DRAGGABLE OBJECT --- */
         #draggable {
@@ -83,13 +114,11 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 8vmin;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             cursor: grab;
             z-index: 10;
             user-select: none;
@@ -97,22 +126,26 @@
             transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
                         left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
                         transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: white;
+            font-size: 8vmin;
         }
 
-        #draggable:active {
+        #draggable.dragging {
             cursor: grabbing;
-            transform: translate(-50%, -50%) scale(1.1);
+            transform: scale(1.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            z-index: 100;
         }
 
         /* --- POPUP MODAL --- */
         #modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.4);
-            display: none; /* Hidden by default */
+            background: rgba(0,0,0,0.6);
+            display: none;
             align-items: center;
             justify-content: center;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .modal-content {
@@ -120,13 +153,13 @@
             padding: 40px 60px;
             border-radius: 40px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .modal-content h2 {
             font-size: 3rem;
-            margin: 0 0 20px 0;
+            margin-bottom: 20px;
         }
 
         .modal-content.correct h2 { color: #4CAF50; }
@@ -135,18 +168,37 @@
         .modal-content button {
             font-family: inherit;
             font-size: 1.5rem;
-            padding: 10px 30px;
+            padding: 15px 40px;
             border: none;
-            border-radius: 20px;
-            background: #FF6B6B;
+            border-radius: 25px;
+            background: #4ECDC4;
             color: white;
             cursor: pointer;
-            box-shadow: 0 5px 0 #d9534f;
+            box-shadow: 0 5px 0 #3dbdb5;
             transition: all 0.1s;
+            margin: 5px;
+        }
+
+        .modal-content button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #3dbdb5;
         }
 
         .modal-content button:active {
             transform: translateY(5px);
+            box-shadow: 0 0 0 #3dbdb5;
+        }
+
+        .modal-content button.secondary {
+            background: #FF6B6B;
+            box-shadow: 0 5px 0 #d9534f;
+        }
+
+        .modal-content button.secondary:hover {
+            box-shadow: 0 7px 0 #d9534f;
+        }
+
+        .modal-content button.secondary:active {
             box-shadow: 0 0 0 #d9534f;
         }
 
@@ -154,87 +206,214 @@
             0% { transform: scale(0.5); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
+
+        /* --- PROGRESS BAR --- */
+        #progress-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,255,255,0.95);
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            color: #555;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Where does the trash go?</h1>
-
-    <div id="game-area">
-        <!-- The 4 Zones -->
-        <div class="zone" id="zone-mouth">
-            <span class="emoji">👄</span>
-            <span class="label">Mouth</span>
-        </div>
-        <div class="zone" id="zone-bag">
-            <span class="emoji">🎒</span>
-            <span class="label">Bag</span>
-        </div>
-        <div class="zone" id="zone-bush">
-            <span class="emoji">🌿</span>
-            <span class="label">Bush</span>
-        </div>
-        <div class="zone" id="zone-bin">
-            <span class="emoji">🗑️</span>
-            <span class="label">Trashbin</span>
-        </div>
-
-        <!-- The Draggable Object -->
-        <div id="draggable">🍔</div>
+    <div id="header">
+        <h1> Where Does It Go?</h1>
+        <div id="level-indicator">Level 1</div>
     </div>
 
-    <!-- The Feedback Popup -->
+    <div id="game-area">
+        <div class="zone" id="zone-1">
+            <span class="label" id="label-1">Zone 1</span>
+        </div>
+        <div class="zone" id="zone-2">
+            <span class="label" id="label-2">Zone 2</span>
+        </div>
+        <div class="zone" id="zone-3">
+            <span class="label" id="label-3">Zone 3</span>
+        </div>
+        <div class="zone" id="zone-4">
+            <span class="label" id="label-4">Zone 4</span>
+        </div>
+        <div id="draggable">🗑️</div>
+    </div>
+
+    <div id="progress-container">
+        <span id="progress-text">Level 1 of 5</span>
+    </div>
+
     <div id="modal">
         <div class="modal-content" id="modal-box">
             <h2 id="modal-text">Yay!</h2>
-            <button onclick="closeModal()">Play Again</button>
+            <div>
+                <button id="next-btn" onclick="nextLevel()">Next Level ➡️</button>
+                <button class="secondary" onclick="retryLevel()">Try Again 🔄</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Get elements
+        /* ============================================
+           CONFIGURATION - EASY TO EDIT
+           ============================================ */
+        
+        const CONFIG = {
+            USE_IMAGES: false,
+            
+            SOUNDS: {
+                correct: '',
+                incorrect: '',
+                win: ''
+            },
+            
+            LEVELS: [
+                {
+                    object: '🗑️',
+                    objectName: 'Trash',
+                    zones: [
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '🎒', label: 'Bag', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '️', label: 'Trashbin', color: '#FDFD96', correct: true }
+                    ]
+                },
+                {
+                    object: '📦',
+                    objectName: 'Box',
+                    zones: [
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                },
+                {
+                    object: '🍎',
+                    objectName: 'Apple',
+                    zones: [
+                        { id: 'zone-1', emoji: '👄', label: 'Eat', color: '#FFD1DC', correct: true },
+                        { id: 'zone-2', emoji: '🎒', label: 'Bag', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                }
+            ]
+        };
+
+        /* ============================================
+           GAME STATE
+           ============================================ */
+        
+        let currentLevel = 0;
+        let isDragging = false;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+
+        // DOM Elements
         const obj = document.getElementById('draggable');
-        const zones = document.querySelectorAll('.zone');
+        const gameArea = document.getElementById('game-area');
         const modal = document.getElementById('modal');
         const modalBox = document.getElementById('modal-box');
         const modalText = document.getElementById('modal-text');
-        const gameArea = document.getElementById('game-area');
+        const levelIndicator = document.getElementById('level-indicator');
+        const progressText = document.getElementById('progress-text');
+        const nextBtn = document.getElementById('next-btn');
 
-        let isDragging = false;
-        let startX, startY;
+        /* ============================================
+           INITIALIZATION
+           ============================================ */
+        
+        function initLevel(levelIndex) {
+            const level = CONFIG.LEVELS[levelIndex];
+            
+            levelIndicator.textContent = `Level ${levelIndex + 1}`;
+            progressText.textContent = `Level ${levelIndex + 1} of ${CONFIG.LEVELS.length}`;
+            
+            level.zones.forEach(zoneConfig => {
+                const zone = document.getElementById(zoneConfig.id);
+                const label = document.getElementById(`label-${zoneConfig.id.split('-')[1]}`);
+                
+                zone.style.backgroundColor = zoneConfig.color;
+                
+                if (CONFIG.USE_IMAGES) {
+                    zone.style.backgroundImage = `url(${zoneConfig.emoji})`;
+                    label.textContent = zoneConfig.label;
+                } else {
+                    zone.innerHTML = `
+                        <span style="font-size: 6vmin;">${zoneConfig.emoji}</span>
+                        <span class="label">${zoneConfig.label}</span>
+                    `;
+                }
+                
+                zone.dataset.correct = zoneConfig.correct;
+            });
+            
+            if (CONFIG.USE_IMAGES) {
+                obj.style.backgroundImage = `url(${level.object})`;
+                obj.textContent = '';
+            } else {
+                obj.textContent = level.object;
+            }
+            
+            resetObject();
+        }
 
-        // --- DRAG AND DROP LOGIC (Touch & Mouse friendly) ---
+        /* ============================================
+           DRAG AND DROP LOGIC (FIXED)
+           ============================================ */
         
         obj.addEventListener('pointerdown', (e) => {
             isDragging = true;
-            obj.style.transition = 'none'; // Turn off animation while dragging
+            obj.classList.add('dragging');
+            obj.style.transition = 'none';
+            
+            // Get positions relative to game area
+            const gameAreaRect = gameArea.getBoundingClientRect();
+            const objRect = obj.getBoundingClientRect();
+            
+            // Calculate offset from mouse to object's top-left corner
+            dragOffsetX = e.clientX - objRect.left;
+            dragOffsetY = e.clientY - objRect.top;
+            
+            // Set initial position to current rendered position (removes transform)
+            const currentLeft = objRect.left - gameAreaRect.left;
+            const currentTop = objRect.top - gameAreaRect.top;
+            
+            obj.style.left = currentLeft + 'px';
+            obj.style.top = currentTop + 'px';
             obj.style.transform = 'none';
             
-            // Calculate offset so the object doesn't jump to the cursor center
-            const rect = obj.getBoundingClientRect();
-            startX = e.clientX - rect.left;
-            startY = e.clientY - rect.top;
-            
-            obj.setPointerCapture(e.pointerId); // Keep tracking even if finger slips off
-            obj.style.zIndex = 20;
+            obj.setPointerCapture(e.pointerId);
         });
 
         document.addEventListener('pointermove', (e) => {
             if (!isDragging) return;
-            e.preventDefault(); // Stop screen scrolling on mobile
+            e.preventDefault();
             
-            // Move object
-            const x = e.clientX - startX;
-            const y = e.clientY - startY;
-            obj.style.left = x + 'px';
-            obj.style.top = y + 'px';
-
-            // Check if hovering over a zone to highlight it
-            zones.forEach(zone => {
+            const gameAreaRect = gameArea.getBoundingClientRect();
+            
+            // Calculate new position relative to game area
+            const newLeft = e.clientX - gameAreaRect.left - dragOffsetX;
+            const newTop = e.clientY - gameAreaRect.top - dragOffsetY;
+            
+            obj.style.left = newLeft + 'px';
+            obj.style.top = newTop + 'px';
+            
+            // Check hover over zones
+            document.querySelectorAll('.zone').forEach(zone => {
                 const zoneRect = zone.getBoundingClientRect();
-                const objCenterX = x + (obj.offsetWidth / 2);
-                const objCenterY = y + (obj.offsetHeight / 2);
-
+                const objRect = obj.getBoundingClientRect();
+                const objCenterX = objRect.left + objRect.width / 2;
+                const objCenterY = objRect.top + objRect.height / 2;
+                
                 if (objCenterX >= zoneRect.left && objCenterX <= zoneRect.right &&
                     objCenterY >= zoneRect.top && objCenterY <= zoneRect.bottom) {
                     zone.classList.add('hover');
@@ -247,63 +426,96 @@
         document.addEventListener('pointerup', (e) => {
             if (!isDragging) return;
             isDragging = false;
+            obj.classList.remove('dragging');
             
-            // Remove all hover highlights
-            zones.forEach(z => z.classList.remove('hover'));
-
-            // Check if dropped on a zone
+            document.querySelectorAll('.zone').forEach(z => z.classList.remove('hover'));
+            
             const objRect = obj.getBoundingClientRect();
             const objCenterX = objRect.left + objRect.width / 2;
             const objCenterY = objRect.top + objRect.height / 2;
             
             let droppedZone = null;
-            zones.forEach(zone => {
+            document.querySelectorAll('.zone').forEach(zone => {
                 const zoneRect = zone.getBoundingClientRect();
                 if (objCenterX >= zoneRect.left && objCenterX <= zoneRect.right &&
                     objCenterY >= zoneRect.top && objCenterY <= zoneRect.bottom) {
                     droppedZone = zone;
                 }
             });
-
-            // Show feedback
+            
             if (droppedZone) {
-                if (droppedZone.id === 'zone-bin') {
-                    showModal('Yay! Correct! 🎉', true);
-                } else {
-                    showModal('Oops! Try Again! 🤔', false);
-                }
+                const isCorrect = droppedZone.dataset.correct === 'true';
+                playSound(isCorrect ? 'correct' : 'incorrect');
+                showModal(isCorrect);
             }
             
-            // Reset object position with a smooth animation
             resetObject();
         });
 
-        // --- HELPER FUNCTIONS ---
-
+        /* ============================================
+           GAME FUNCTIONS
+           ============================================ */
+        
         function resetObject() {
             obj.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
             obj.style.top = '50%';
             obj.style.left = '50%';
             obj.style.transform = 'translate(-50%, -50%)';
-            obj.style.zIndex = 10;
         }
 
-        function showModal(text, isCorrect) {
-            modalText.innerText = text;
+        function showModal(isCorrect) {
             modal.style.display = 'flex';
+            modalBox.className = 'modal-content ' + (isCorrect ? 'correct' : 'incorrect');
             
             if (isCorrect) {
-                modalBox.classList.add('correct');
-                modalBox.classList.remove('incorrect');
+                modalText.textContent = '🎉 Correct! Great Job!';
+                nextBtn.style.display = 'inline-block';
+                
+                if (currentLevel >= CONFIG.LEVELS.length - 1) {
+                    nextBtn.textContent = '🏆 Play Again';
+                    playSound('win');
+                } else {
+                    nextBtn.textContent = 'Next Level ➡️';
+                }
             } else {
-                modalBox.classList.add('incorrect');
-                modalBox.classList.remove('correct');
+                modalText.textContent = '❌ Wrong! Try Again!';
+                nextBtn.style.display = 'none';
             }
         }
 
         function closeModal() {
             modal.style.display = 'none';
         }
+
+        function nextLevel() {
+            closeModal();
+            currentLevel++;
+            
+            if (currentLevel >= CONFIG.LEVELS.length) {
+                currentLevel = 0;
+            }
+            
+            initLevel(currentLevel);
+        }
+
+        function retryLevel() {
+            closeModal();
+            resetObject();
+        }
+
+        function playSound(type) {
+            const soundPath = CONFIG.SOUNDS[type];
+            if (soundPath) {
+                const audio = new Audio(soundPath);
+                audio.play().catch(e => console.log('Sound play failed:', e));
+            }
+        }
+
+        /* ============================================
+           START GAME
+           ============================================ */
+        
+        initLevel(0);
     </script>
 </body>
 </html>
