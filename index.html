@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Where Does It Go? 🗑️</title>
+    <style>
+        /* --- GENERAL STYLES --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
+            background: linear-gradient(135deg, #FDEFF4 0%, #E0F7FA 100%);
+            overflow: hidden; /* Prevents scrolling while dragging */
+            touch-action: none; /* Prevents mobile browser pull-to-refresh */
+            height: 100vh;
+            width: 100vw;
+        }
+
+        h1 {
+            text-align: center;
+            color: #FF6B6B;
+            font-size: 2.5rem;
+            margin-top: 20px;
+            text-shadow: 2px 2px 0px #FFF;
+            pointer-events: none; /* Lets clicks pass through to objects behind text */
+        }
+
+        /* --- GAME AREA --- */
+        #game-area {
+            position: relative;
+            width: 100%;
+            height: 85vh;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* --- ZONES (The 4 targets) --- */
+        .zone {
+            position: absolute;
+            width: 25vmin; /* Responsive size based on screen */
+            height: 25vmin;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 5vmin;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            border: 4px dashed rgba(255,255,255,0.8);
+        }
+
+        .zone span.label {
+            font-size: 2.5vmin;
+            margin-top: 10px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* Zone Positions */
+        #zone-mouth { top: 10%; left: 5%; background-color: #FFD1DC; } /* Top Left */
+        #zone-bag   { top: 10%; right: 5%; background-color: #C1E1C1; } /* Top Right */
+        #zone-bush  { top: 50%; left: 5%; transform: translateY(-50%); background-color: #AEC6CF; } /* Middle Left */
+        #zone-bin   { top: 50%; right: 5%; transform: translateY(-50%); background-color: #FDFD96; } /* Middle Right (Correct) */
+
+        /* Hover/Active effect for zones */
+        .zone.hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            border-color: #FF6B6B;
+        }
+        
+        /* Fix transform for middle zones when hovering */
+        #zone-bush.hover { transform: translateY(-50%) scale(1.1); }
+        #zone-bin.hover  { transform: translateY(-50%) scale(1.1); }
+
+        /* --- DRAGGABLE OBJECT --- */
+        #draggable {
+            position: absolute;
+            width: 15vmin;
+            height: 15vmin;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8vmin;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            cursor: grab;
+            z-index: 10;
+            user-select: none;
+            touch-action: none;
+            transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                        transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #draggable:active {
+            cursor: grabbing;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* --- POPUP MODAL --- */
+        #modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px 60px;
+            border-radius: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-content h2 {
+            font-size: 3rem;
+            margin: 0 0 20px 0;
+        }
+
+        .modal-content.correct h2 { color: #4CAF50; }
+        .modal-content.incorrect h2 { color: #FF6B6B; }
+
+        .modal-content button {
+            font-family: inherit;
+            font-size: 1.5rem;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 20px;
+            background: #FF6B6B;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #d9534f;
+            transition: all 0.1s;
+        }
+
+        .modal-content button:active {
+            transform: translateY(5px);
+            box-shadow: 0 0 0 #d9534f;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Where does the trash go?</h1>
+
+    <div id="game-area">
+        <!-- The 4 Zones -->
+        <div class="zone" id="zone-mouth">
+            <span class="emoji">👄</span>
+            <span class="label">Mouth</span>
+        </div>
+        <div class="zone" id="zone-bag">
+            <span class="emoji">🎒</span>
+            <span class="label">Bag</span>
+        </div>
+        <div class="zone" id="zone-bush">
+            <span class="emoji">🌿</span>
+            <span class="label">Bush</span>
+        </div>
+        <div class="zone" id="zone-bin">
+            <span class="emoji">🗑️</span>
+            <span class="label">Trashbin</span>
+        </div>
+
+        <!-- The Draggable Object -->
+        <div id="draggable">🍔</div>
+    </div>
+
+    <!-- The Feedback Popup -->
+    <div id="modal">
+        <div class="modal-content" id="modal-box">
+            <h2 id="modal-text">Yay!</h2>
+            <button onclick="closeModal()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const obj = document.getElementById('draggable');
+        const zones = document.querySelectorAll('.zone');
+        const modal = document.getElementById('modal');
+        const modalBox = document.getElementById('modal-box');
+        const modalText = document.getElementById('modal-text');
+        const gameArea = document.getElementById('game-area');
+
+        let isDragging = false;
+        let startX, startY;
+
+        // --- DRAG AND DROP LOGIC (Touch & Mouse friendly) ---
+        
+        obj.addEventListener('pointerdown', (e) => {
+            isDragging = true;
+            obj.style.transition = 'none'; // Turn off animation while dragging
+            obj.style.transform = 'none';
+            
+            // Calculate offset so the object doesn't jump to the cursor center
+            const rect = obj.getBoundingClientRect();
+            startX = e.clientX - rect.left;
+            startY = e.clientY - rect.top;
+            
+            obj.setPointerCapture(e.pointerId); // Keep tracking even if finger slips off
+            obj.style.zIndex = 20;
+        });
+
+        document.addEventListener('pointermove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault(); // Stop screen scrolling on mobile
+            
+            // Move object
+            const x = e.clientX - startX;
+            const y = e.clientY - startY;
+            obj.style.left = x + 'px';
+            obj.style.top = y + 'px';
+
+            // Check if hovering over a zone to highlight it
+            zones.forEach(zone => {
+                const zoneRect = zone.getBoundingClientRect();
+                const objCenterX = x + (obj.offsetWidth / 2);
+                const objCenterY = y + (obj.offsetHeight / 2);
+
+                if (objCenterX >= zoneRect.left && objCenterX <= zoneRect.right &&
+                    objCenterY >= zoneRect.top && objCenterY <= zoneRect.bottom) {
+                    zone.classList.add('hover');
+                } else {
+                    zone.classList.remove('hover');
+                }
+            });
+        });
+
+        document.addEventListener('pointerup', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            // Remove all hover highlights
+            zones.forEach(z => z.classList.remove('hover'));
+
+            // Check if dropped on a zone
+            const objRect = obj.getBoundingClientRect();
+            const objCenterX = objRect.left + objRect.width / 2;
+            const objCenterY = objRect.top + objRect.height / 2;
+            
+            let droppedZone = null;
+            zones.forEach(zone => {
+                const zoneRect = zone.getBoundingClientRect();
+                if (objCenterX >= zoneRect.left && objCenterX <= zoneRect.right &&
+                    objCenterY >= zoneRect.top && objCenterY <= zoneRect.bottom) {
+                    droppedZone = zone;
+                }
+            });
+
+            // Show feedback
+            if (droppedZone) {
+                if (droppedZone.id === 'zone-bin') {
+                    showModal('Yay! Correct! 🎉', true);
+                } else {
+                    showModal('Oops! Try Again! 🤔', false);
+                }
+            }
+            
+            // Reset object position with a smooth animation
+            resetObject();
+        });
+
+        // --- HELPER FUNCTIONS ---
+
+        function resetObject() {
+            obj.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            obj.style.top = '50%';
+            obj.style.left = '50%';
+            obj.style.transform = 'translate(-50%, -50%)';
+            obj.style.zIndex = 10;
+        }
+
+        function showModal(text, isCorrect) {
+            modalText.innerText = text;
+            modal.style.display = 'flex';
+            
+            if (isCorrect) {
+                modalBox.classList.add('correct');
+                modalBox.classList.remove('incorrect');
+            } else {
+                modalBox.classList.add('incorrect');
+                modalBox.classList.remove('correct');
+            }
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
