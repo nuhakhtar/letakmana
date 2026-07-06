@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Sorting Game 🎮</title>
+    <title>Where Does It Go? 🎮</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,6 @@
 
         body {
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
-            /* Multiple fallbacks */
             background-color: #667eea;
             background-image: url('background.png');
             background-size: cover;
@@ -27,46 +26,91 @@
             position: relative;
         }
 
-        /* Dark overlay - ADJUST THIS VALUE: 0.0 = no dark, 1.0 = completely black */
+        /* Dark overlay */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3); /* 30% dark - change to 0.2 for lighter or 0.5 for darker */
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
             pointer-events: none;
             z-index: 0;
         }
 
         /* --- HEADER --- */
         #header {
-            text-align: center;
-            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
             background: rgba(255,255,255,0.95);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             position: relative;
             z-index: 10;
         }
 
-        h1 {
+        #logo {
+            font-size: 1.8rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s;
+            user-select: none;
+        }
+
+        #logo:hover {
+            transform: scale(1.1);
+        }
+
+        #logo:active {
+            transform: scale(0.95);
+        }
+
+        #header-title {
+            text-align: center;
+            flex: 1;
+        }
+
+        #header-title h1 {
             color: #FF6B6B;
-            font-size: 2rem;
-            margin-bottom: 5px;
+            font-size: 1.8rem;
+            margin-bottom: 2px;
         }
 
         #level-indicator {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             color: #4ECDC4;
             font-weight: bold;
+        }
+
+        #about-btn {
+            font-size: 1.2rem;
+            color: #4ECDC4;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(78, 205, 196, 0.1);
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        #about-btn:hover {
+            background: rgba(78, 205, 196, 0.3);
+            transform: scale(1.05);
+        }
+
+        #about-btn:active {
+            transform: scale(0.95);
         }
 
         /* --- GAME AREA --- */
         #game-area {
             position: relative;
             width: 100%;
-            height: calc(100vh - 100px);
+            height: calc(100vh - 80px);
             max-width: 1200px;
             margin: 0 auto;
             z-index: 5;
@@ -98,7 +142,6 @@
             border-radius: 15px;
         }
 
-        /* Zone Positions */
         #zone-1 { top: 8%; left: 5%; }
         #zone-2 { top: 8%; right: 5%; }
         #zone-3 { top: 55%; left: 5%; }
@@ -143,8 +186,8 @@
             z-index: 100;
         }
 
-        /* --- POPUP MODAL --- */
-        #modal {
+        /* --- MODALS --- */
+        .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.6);
@@ -161,10 +204,11 @@
             text-align: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.4);
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 500px;
         }
 
         .modal-content h2 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
         }
 
@@ -173,8 +217,8 @@
 
         .modal-content button {
             font-family: inherit;
-            font-size: 1.5rem;
-            padding: 15px 40px;
+            font-size: 1.3rem;
+            padding: 12px 30px;
             border: none;
             border-radius: 25px;
             background: #4ECDC4;
@@ -208,6 +252,28 @@
             box-shadow: 0 0 0 #d9534f;
         }
 
+        /* About Us specific */
+        #about-modal .modal-content {
+            text-align: left;
+        }
+
+        #about-modal h2 {
+            text-align: center;
+            color: #4ECDC4;
+        }
+
+        #about-modal p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        #about-modal .close-btn {
+            display: block;
+            margin: 20px auto 0;
+        }
+
         @keyframes popIn {
             0% { transform: scale(0.5); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -231,32 +297,32 @@
 </head>
 <body>
 
+    <!-- HEADER -->
     <div id="header">
-        <h1> Where Does It Go?</h1>
-        <div id="level-indicator">Level 1</div>
+        <a id="logo" onclick="goHome()" title="Go to Homepage">🏠 Home</a>
+        <div id="header-title">
+            <h1>Where Does It Go?</h1>
+            <div id="level-indicator">Level 1</div>
+        </div>
+        <a id="about-btn" onclick="openAbout()">About Us ℹ️</a>
     </div>
 
+    <!-- GAME AREA -->
     <div id="game-area">
-        <div class="zone" id="zone-1">
-            <span class="label" id="label-1">Zone 1</span>
-        </div>
-        <div class="zone" id="zone-2">
-            <span class="label" id="label-2">Zone 2</span>
-        </div>
-        <div class="zone" id="zone-3">
-            <span class="label" id="label-3">Zone 3</span>
-        </div>
-        <div class="zone" id="zone-4">
-            <span class="label" id="label-4">Zone 4</span>
-        </div>
+        <div class="zone" id="zone-1"><span class="label" id="label-1">Zone 1</span></div>
+        <div class="zone" id="zone-2"><span class="label" id="label-2">Zone 2</span></div>
+        <div class="zone" id="zone-3"><span class="label" id="label-3">Zone 3</span></div>
+        <div class="zone" id="zone-4"><span class="label" id="label-4">Zone 4</span></div>
         <div id="draggable">🗑️</div>
     </div>
 
+    <!-- PROGRESS -->
     <div id="progress-container">
-        <span id="progress-text">Level 1 of 5</span>
+        <span id="progress-text">Level 1 of 10</span>
     </div>
 
-    <div id="modal">
+    <!-- FEEDBACK MODAL -->
+    <div id="modal" class="modal-overlay">
         <div class="modal-content" id="modal-box">
             <h2 id="modal-text">Yay!</h2>
             <div>
@@ -266,24 +332,29 @@
         </div>
     </div>
 
-    <script>
-        // Check if background image loads
-        window.addEventListener('load', function() {
-            const bgImage = new Image();
-            bgImage.onload = function() {
-                console.log('✅ Background image loaded successfully!');
-            };
-            bgImage.onerror = function() {
-                console.error('❌ Background image NOT found! Make sure:');
-                console.error('1. File is named "background.png" (case-sensitive)');
-                console.error('2. File is in the SAME folder as index.html');
-                console.error('3. File path is correct');
-            };
-            bgImage.src = 'background.png';
-        });
+    <!-- ABOUT US MODAL -->
+    <div id="about-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>About Us 🌟</h2>
+            <p>
+                <strong>Where Does It Go?</strong> is a fun educational game designed to help children learn about proper waste sorting and environmental responsibility.
+            </p>
+            <p>
+                🎯 <strong>How to play:</strong> Drag the object in the middle to the correct zone. Only one zone is correct!
+            </p>
+            <p>
+                🌍 <strong>Our mission:</strong> Teaching kids early about recycling, composting, and keeping our planet clean through interactive play.
+            </p>
+            <p>
+                 Made with love for curious little minds!
+            </p>
+            <button class="close-btn" onclick="closeAbout()">Got it! 👍</button>
+        </div>
+    </div>
 
+    <script>
         /* ============================================
-           CONFIGURATION - EASY TO EDIT
+           CONFIGURATION - 10 SCENES
            ============================================ */
         
         const CONFIG = {
@@ -296,34 +367,104 @@
             },
             
             LEVELS: [
+                // Scene 1: Basic Trash
                 {
                     object: '🗑️',
-                    objectName: 'Trash',
                     zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '🎒', label: 'Bag', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-1', emoji: '', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '', label: 'Bag', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '', label: 'Bush', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', emoji: '🗑️', label: 'Trashbin', color: '#FDFD96', correct: true }
                     ]
                 },
+                // Scene 2: Recycling Cardboard
                 {
                     object: '📦',
-                    objectName: 'Box',
+                    zones: [
+                        { id: 'zone-1', emoji: '', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                },
+                // Scene 3: Eating an Apple
+                {
+                    object: '🍎',
+                    zones: [
+                        { id: 'zone-1', emoji: '', label: 'Eat It!', color: '#FFD1DC', correct: true },
+                        { id: 'zone-2', emoji: '🎒', label: 'Bag', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                },
+                // Scene 4: Composting Banana Peel
+                {
+                    object: '',
+                    zones: [
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌱', label: 'Compost', color: '#AEC6CF', correct: true },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                },
+                // Scene 5: Hazardous Battery
+                {
+                    object: '🔋',
+                    zones: [
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '⚠️', label: 'Hazardous', color: '#FFB3BA', correct: true }
+                    ]
+                },
+                // Scene 6: Donating Old Toy
+                {
+                    object: '🧸',
+                    zones: [
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🎁', label: 'Donate', color: '#C1E1C1', correct: true }
+                    ]
+                },
+                // Scene 7: Garden Leaves
+                {
+                    object: '🍂',
+                    zones: [
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌱', label: 'Compost', color: '#AEC6CF', correct: true },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                },
+                // Scene 8: Glass Bottle
+                {
+                    object: '🍾',
+                    zones: [
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '🥛', label: 'Glass Bin', color: '#AEC6CF', correct: true },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#C1E1C1', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                },
+                // Scene 9: Fish Bones (Food Waste)
+                {
+                    object: '🐟',
+                    zones: [
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌱', label: 'Compost', color: '#AEC6CF', correct: true },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                },
+                // Scene 10: Paper
+                {
+                    object: '📄',
                     zones: [
                         { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
                         { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: true },
                         { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
-                    ]
-                },
-                {
-                    object: '🍎',
-                    objectName: 'Apple',
-                    zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Eat', color: '#FFD1DC', correct: true },
-                        { id: 'zone-2', emoji: '🎒', label: 'Bag', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-4', emoji: '️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 }
             ]
@@ -338,7 +479,6 @@
         let dragOffsetX = 0;
         let dragOffsetY = 0;
 
-        // DOM Elements
         const obj = document.getElementById('draggable');
         const gameArea = document.getElementById('game-area');
         const modal = document.getElementById('modal');
@@ -347,6 +487,31 @@
         const levelIndicator = document.getElementById('level-indicator');
         const progressText = document.getElementById('progress-text');
         const nextBtn = document.getElementById('next-btn');
+        const aboutModal = document.getElementById('about-modal');
+
+        /* ============================================
+           HEADER FUNCTIONS
+           ============================================ */
+        
+        function goHome() {
+            currentLevel = 0;
+            initLevel(0);
+            // You can also redirect to homepage:
+            // window.location.href = 'index.html';
+        }
+
+        function openAbout() {
+            aboutModal.style.display = 'flex';
+        }
+
+        function closeAbout() {
+            aboutModal.style.display = 'none';
+        }
+
+        // Close about modal when clicking outside
+        aboutModal.addEventListener('click', (e) => {
+            if (e.target === aboutModal) closeAbout();
+        });
 
         /* ============================================
            INITIALIZATION
@@ -388,7 +553,7 @@
         }
 
         /* ============================================
-           DRAG AND DROP LOGIC
+           DRAG AND DROP
            ============================================ */
         
         obj.addEventListener('pointerdown', (e) => {
