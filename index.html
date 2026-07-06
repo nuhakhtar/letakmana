@@ -11,21 +11,19 @@
             box-sizing: border-box;
         }
 
-        /* ============================================
-           BACKGROUND IMAGE + DARK OVERLAY
-           To use: save the background image as "background.jpg" 
-           in the same folder as this HTML file.
-           ============================================ */
         body {
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
-            background: url('background.jpg') center/cover no-repeat fixed;
+            background-image: url('background.jpg'); /* REPLACE with your image path */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             overflow: hidden;
             touch-action: none;
             height: 100vh;
             width: 100vw;
         }
 
-        /* Dark overlay on top of background */
+        /* Dark overlay for background */
         body::before {
             content: '';
             position: fixed;
@@ -33,7 +31,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.5); /* Darken the background */
             pointer-events: none;
             z-index: 0;
         }
@@ -42,7 +40,7 @@
         #header {
             text-align: center;
             padding: 15px;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255,255,255,0.95);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             position: relative;
             z-index: 10;
@@ -67,7 +65,7 @@
             height: calc(100vh - 100px);
             max-width: 1200px;
             margin: 0 auto;
-            z-index: 1;
+            z-index: 5;
         }
 
         /* --- ZONES --- */
@@ -85,18 +83,14 @@
             border: 4px dashed rgba(255,255,255,0.8);
         }
 
-        .zone span.zone-emoji {
-            font-size: 6vmin;
-        }
-
         .zone span.label {
             position: absolute;
-            bottom: 12px;
-            font-size: 2.2vmin;
+            bottom: 15px;
+            font-size: 2.5vmin;
             color: #555;
             font-weight: bold;
             background: rgba(255,255,255,0.9);
-            padding: 4px 14px;
+            padding: 5px 15px;
             border-radius: 15px;
         }
 
@@ -187,6 +181,11 @@
             margin: 5px;
         }
 
+        .modal-content button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #3dbdb5;
+        }
+
         .modal-content button:active {
             transform: translateY(5px);
             box-shadow: 0 0 0 #3dbdb5;
@@ -195,6 +194,10 @@
         .modal-content button.secondary {
             background: #FF6B6B;
             box-shadow: 0 5px 0 #d9534f;
+        }
+
+        .modal-content button.secondary:hover {
+            box-shadow: 0 7px 0 #d9534f;
         }
 
         .modal-content button.secondary:active {
@@ -225,20 +228,28 @@
 <body>
 
     <div id="header">
-        <h1>🎯 Where Does It Go?</h1>
+        <h1> Where Does It Go?</h1>
         <div id="level-indicator">Level 1</div>
     </div>
 
     <div id="game-area">
-        <div class="zone" id="zone-1"></div>
-        <div class="zone" id="zone-2"></div>
-        <div class="zone" id="zone-3"></div>
-        <div class="zone" id="zone-4"></div>
-        <div id="draggable"></div>
+        <div class="zone" id="zone-1">
+            <span class="label" id="label-1">Zone 1</span>
+        </div>
+        <div class="zone" id="zone-2">
+            <span class="label" id="label-2">Zone 2</span>
+        </div>
+        <div class="zone" id="zone-3">
+            <span class="label" id="label-3">Zone 3</span>
+        </div>
+        <div class="zone" id="zone-4">
+            <span class="label" id="label-4">Zone 4</span>
+        </div>
+        <div id="draggable">🗑️</div>
     </div>
 
     <div id="progress-container">
-        <span id="progress-text">Level 1 of 3</span>
+        <span id="progress-text">Level 1 of 5</span>
     </div>
 
     <div id="modal">
@@ -258,48 +269,42 @@
         
         const CONFIG = {
             USE_IMAGES: false,
-
-            /* 
-               BACKGROUND SETTINGS
-               Change the darkness level here (0 = no dark, 1 = fully black)
-            */
-            BACKGROUND_DARKNESS: 0.35,
-
+            
             SOUNDS: {
-                correct: '',   // e.g., 'sounds/correct.mp3'
-                incorrect: '', // e.g., 'sounds/wrong.mp3'
-                win: ''        // e.g., 'sounds/win.mp3'
+                correct: '',
+                incorrect: '',
+                win: ''
             },
-
+            
             LEVELS: [
                 {
                     object: '🗑️',
                     objectName: 'Trash',
                     zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth',    color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '🎒', label: 'Bag',      color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush',     color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trashbin', color: '#FDFD96', correct: true  }
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '🎒', label: 'Bag', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trashbin', color: '#FDFD96', correct: true }
                     ]
                 },
                 {
                     object: '📦',
-                    objectName: 'Cardboard Box',
+                    objectName: 'Box',
                     zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth',    color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '♻️', label: 'Recycle',  color: '#C1E1C1', correct: true  },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush',     color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trashbin', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 {
-                    object: '🍌',
-                    objectName: 'Banana Peel',
+                    object: '🍎',
+                    objectName: 'Apple',
                     zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth',    color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '🎒', label: 'Bag',      color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '🌱', label: 'Compost',  color: '#AEC6CF', correct: true  },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trashbin', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '👄', label: 'Eat', color: '#FFD1DC', correct: true },
+                        { id: 'zone-2', emoji: '🎒', label: 'Bag', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 }
             ]
@@ -314,6 +319,7 @@
         let dragOffsetX = 0;
         let dragOffsetY = 0;
 
+        // DOM Elements
         const obj = document.getElementById('draggable');
         const gameArea = document.getElementById('game-area');
         const modal = document.getElementById('modal');
@@ -322,15 +328,6 @@
         const levelIndicator = document.getElementById('level-indicator');
         const progressText = document.getElementById('progress-text');
         const nextBtn = document.getElementById('next-btn');
-
-        /* ============================================
-           APPLY BACKGROUND DARKNESS FROM CONFIG
-           ============================================ */
-        document.querySelector('body').style.setProperty('--darkness', CONFIG.BACKGROUND_DARKNESS);
-        document.querySelector('body::before') // won't work directly, so we inject a style
-        const darkStyle = document.createElement('style');
-        darkStyle.textContent = `body::before { background: rgba(0,0,0,${CONFIG.BACKGROUND_DARKNESS}) !important; }`;
-        document.head.appendChild(darkStyle);
 
         /* ============================================
            INITIALIZATION
@@ -344,31 +341,27 @@
             
             level.zones.forEach(zoneConfig => {
                 const zone = document.getElementById(zoneConfig.id);
+                const label = document.getElementById(`label-${zoneConfig.id.split('-')[1]}`);
+                
                 zone.style.backgroundColor = zoneConfig.color;
-                zone.dataset.correct = zoneConfig.correct;
-
+                
                 if (CONFIG.USE_IMAGES) {
                     zone.style.backgroundImage = `url(${zoneConfig.emoji})`;
-                    zone.style.backgroundSize = '60% 60%';
-                    zone.style.backgroundRepeat = 'no-repeat';
-                    zone.style.backgroundPosition = 'center 30%';
-                    zone.innerHTML = `<span class="label">${zoneConfig.label}</span>`;
+                    label.textContent = zoneConfig.label;
                 } else {
                     zone.innerHTML = `
-                        <span class="zone-emoji">${zoneConfig.emoji}</span>
+                        <span style="font-size: 6vmin;">${zoneConfig.emoji}</span>
                         <span class="label">${zoneConfig.label}</span>
                     `;
                 }
+                
+                zone.dataset.correct = zoneConfig.correct;
             });
             
             if (CONFIG.USE_IMAGES) {
                 obj.style.backgroundImage = `url(${level.object})`;
-                obj.style.backgroundSize = 'contain';
-                obj.style.backgroundRepeat = 'no-repeat';
-                obj.style.backgroundPosition = 'center';
                 obj.textContent = '';
             } else {
-                obj.style.backgroundImage = '';
                 obj.textContent = level.object;
             }
             
