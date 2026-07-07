@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Letak di Mana? 🎮</title>
+    <title>Letak Mana? 🎮</title>
     <style>
         * {
             margin: 0;
@@ -14,10 +14,11 @@
         body {
             font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
             background-color: #667eea;
-            background-image: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            background-image: url('background.png');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            background-repeat: no-repeat;
             overflow: hidden;
             touch-action: none;
             height: 100vh;
@@ -30,7 +31,7 @@
             content: '';
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
             pointer-events: none;
             z-index: 0;
         }
@@ -42,14 +43,13 @@
             align-items: center;
             padding: 10px 20px;
             background: rgba(255,255,255,0.95);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             position: relative;
             z-index: 10;
-            backdrop-filter: blur(5px);
         }
 
         #logo {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
             text-decoration: none;
             display: flex;
@@ -57,12 +57,15 @@
             gap: 8px;
             transition: transform 0.2s;
             user-select: none;
-            color: #FF6B6B;
-            font-weight: bold;
         }
 
-        #logo:hover { transform: scale(1.1); }
-        #logo:active { transform: scale(0.95); }
+        #logo:hover {
+            transform: scale(1.1);
+        }
+
+        #logo:active {
+            transform: scale(0.95);
+        }
 
         #header-title {
             text-align: center;
@@ -70,20 +73,19 @@
         }
 
         #header-title h1 {
-            color: #4ECDC4;
+            color: #FF6B6B;
             font-size: 1.8rem;
             margin-bottom: 2px;
-            text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
         }
 
         #level-indicator {
-            font-size: 1rem;
-            color: #555;
+            font-size: 1.1rem;
+            color: #4ECDC4;
             font-weight: bold;
         }
 
         #about-btn {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #4ECDC4;
             cursor: pointer;
             text-decoration: none;
@@ -100,11 +102,15 @@
             transform: scale(1.05);
         }
 
+        #about-btn:active {
+            transform: scale(0.95);
+        }
+
         /* --- GAME AREA --- */
         #game-area {
             position: relative;
             width: 100%;
-            height: calc(100vh - 70px);
+            height: calc(100vh - 80px);
             max-width: 1200px;
             margin: 0 auto;
             z-index: 5;
@@ -113,45 +119,27 @@
         /* --- ZONES --- */
         .zone {
             position: absolute;
-            width: 24vmin;
-            height: 24vmin;
-            border-radius: 30px;
+            width: 22vmin;
+            height: 22vmin;
+            border-radius: 25px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transition: all 0.2s;
             border: 4px dashed rgba(255,255,255,0.8);
-            background-color: white;
-            overflow: hidden;
-        }
-
-        .zone-img-container {
-            width: 65%;
-            height: 65%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 5px;
-        }
-
-        .zone-img-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
         }
 
         .zone span.label {
-            font-size: 2.2vmin;
+            position: absolute;
+            bottom: 15px;
+            font-size: 2.5vmin;
             color: #555;
             font-weight: bold;
             background: rgba(255,255,255,0.9);
-            padding: 4px 12px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 5px 15px;
+            border-radius: 15px;
         }
 
         #zone-1 { top: 8%; left: 5%; }
@@ -161,18 +149,17 @@
 
         .zone.hover {
             transform: scale(1.15);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
             border-color: #FF6B6B;
             border-style: solid;
-            background-color: #fff5f5;
             z-index: 5;
         }
 
         /* --- DRAGGABLE OBJECT --- */
         #draggable {
             position: absolute;
-            width: 18vmin;
-            height: 18vmin;
+            width: 15vmin;
+            height: 15vmin;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -189,22 +176,14 @@
                         left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
                         transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             background: white;
-            border: 4px solid white;
-        }
-
-        #draggable img {
-            width: 85%;
-            height: 85%;
-            object-fit: contain;
-            pointer-events: none;
+            font-size: 8vmin;
         }
 
         #draggable.dragging {
             cursor: grabbing;
-            transform: scale(1.3) translate(-50%, -50%) !important;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transform: scale(1.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             z-index: 100;
-            transition: none;
         }
 
         /* --- MODALS --- */
@@ -216,22 +195,20 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            backdrop-filter: blur(3px);
         }
 
         .modal-content {
             background: white;
-            padding: 40px 50px;
+            padding: 40px 60px;
             border-radius: 40px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
             animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 90%;
-            width: 400px;
+            max-width: 500px;
         }
 
         .modal-content h2 {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
         }
 
@@ -240,8 +217,8 @@
 
         .modal-content button {
             font-family: inherit;
-            font-size: 1.2rem;
-            padding: 12px 25px;
+            font-size: 1.3rem;
+            padding: 12px 30px;
             border: none;
             border-radius: 25px;
             background: #4ECDC4;
@@ -249,8 +226,7 @@
             cursor: pointer;
             box-shadow: 0 5px 0 #3dbdb5;
             transition: all 0.1s;
-            margin: 8px;
-            font-weight: bold;
+            margin: 5px;
         }
 
         .modal-content button:hover {
@@ -276,6 +252,7 @@
             box-shadow: 0 0 0 #d9534f;
         }
 
+        /* About Us specific */
         #about-modal .modal-content {
             text-align: left;
         }
@@ -286,7 +263,7 @@
         }
 
         #about-modal p {
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #555;
             line-height: 1.6;
             margin-bottom: 15px;
@@ -309,23 +286,22 @@
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255,255,255,0.95);
-            padding: 10px 25px;
+            padding: 12px 30px;
             border-radius: 25px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #555;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             z-index: 10;
-            font-weight: bold;
-            white-space: nowrap;
         }
     </style>
 </head>
 <body>
+<!-- v0.5 test -->
     <!-- HEADER -->
     <div id="header">
-        <a id="logo" onclick="goHome()" title="Go to Homepage">🏠 Home</a>
+        <a id="logo" onclick="goHome()" title="Go to Homepage"><img src="logo.png" alt="Logo" width="100" height="100"></a>
         <div id="header-title">
-            <h1>Letak di Mana?</h1>
+            <h1>Letak Mana?</h1>
             <div id="level-indicator">Level 1</div>
         </div>
         <a id="about-btn" onclick="openAbout()">About Us ℹ️</a>
@@ -337,7 +313,7 @@
         <div class="zone" id="zone-2"><span class="label" id="label-2">Zone 2</span></div>
         <div class="zone" id="zone-3"><span class="label" id="label-3">Zone 3</span></div>
         <div class="zone" id="zone-4"><span class="label" id="label-4">Zone 4</span></div>
-        <div id="draggable"></div>
+        <div id="draggable">🗑️</div>
     </div>
 
     <!-- PROGRESS -->
@@ -359,119 +335,136 @@
     <!-- ABOUT US MODAL -->
     <div id="about-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2>About Us </h2>
-            <p><strong>Where Does It Go?</strong> is a fun educational game designed to help children learn about proper waste sorting.</p>
-            <p> <strong>How to play:</strong> Drag the object in the middle to the correct zone. Only one zone is correct!</p>
-            <p> <strong>Our mission:</strong> Teaching kids early about recycling, composting, and keeping our planet clean through interactive play.</p>
+            <h2>About Us 🌟</h2>
+            <p>
+                <strong>Where Does It Go?</strong> is a fun educational game designed to help children learn about proper waste sorting and environmental responsibility.
+            </p>
+            <p>
+                🎯 <strong>How to play:</strong> Drag the object in the middle to the correct zone. Only one zone is correct!
+            </p>
+            <p>
+                🌍 <strong>Our mission:</strong> Teaching kids early about recycling, composting, and keeping our planet clean through interactive play.
+            </p>
+            <p>
+                 Made with love for curious little minds!
+            </p>
             <button class="close-btn" onclick="closeAbout()">Got it! 👍</button>
         </div>
     </div>
 
     <script>
         /* ============================================
-           CONFIGURATION - IRASUTOYA ASSETS & LEVELS
+           CONFIGURATION - 10 SCENES
            ============================================ */
         
         const CONFIG = {
+            USE_IMAGES: false,
+            
+            SOUNDS: {
+                correct: '',
+                incorrect: '',
+                win: ''
+            },
+            
             LEVELS: [
                 // Scene 1: Basic Trash
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_10.png', // Garbage bag
+                    object: '🗑️',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_22.png', label: 'Bag', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2014/04/blog-post_21.html', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_10.html', label: 'Trashbin', color: '#FDFD96', correct: true }
+                        { id: 'zone-1', emoji: '', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '', label: 'Bag', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trashbin', color: '#FDFD96', correct: true }
                     ]
                 },
                 // Scene 2: Recycling Cardboard
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_12.png', // Cardboard box
+                    object: '📦',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_13.png', label: 'Recycle', color: '#C1E1C1', correct: true },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2014/04/blog-post_21.html', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_10.html', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 3: Eating an Apple
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_14.html', // Apple
+                    object: '🍎',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Eat It!', color: '#FFD1DC', correct: true },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_22.png', label: 'Bag', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2014/04/blog-post_21.html', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_10.html', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '', label: 'Eat It!', color: '#FFD1DC', correct: true },
+                        { id: 'zone-2', emoji: '🎒', label: 'Bag', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 4: Composting Banana Peel
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_11.png', // Banana peel
+                    object: '',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_13.png', label: 'Recycle', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_14.png', label: 'Compost', color: '#AEC6CF', correct: true },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_10.html', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌱', label: 'Compost', color: '#AEC6CF', correct: true },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 5: Hazardous Battery
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_15.png', // Battery
+                    object: '🔋',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_13.png', label: 'Recycle', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2014/04/blog-post_21.html', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_16.png', label: 'Hazardous', color: '#FFB3BA', correct: true }
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '⚠️', label: 'Hazardous', color: '#FFB3BA', correct: true }
                     ]
                 },
                 // Scene 6: Donating Old Toy
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_17.png', // Teddy bear
+                    object: '🧸',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_10.html', label: 'Trash', color: '#FDFD96', correct: false },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2014/04/blog-post_21.html', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_18.png', label: 'Donate', color: '#C1E1C1', correct: true }
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🎁', label: 'Donate', color: '#C1E1C1', correct: true }
                     ]
                 },
                 // Scene 7: Garden Leaves
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2014/04/blog-post_22.html', // Fallen leaves
+                    object: '🍂',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_13.png', label: 'Recycle', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_14.png', label: 'Compost', color: '#AEC6CF', correct: true },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_10.html', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌱', label: 'Compost', color: '#AEC6CF', correct: true },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 8: Glass Bottle
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_19.png', // Bottle
+                    object: '🍾',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_20.png', label: 'Glass Bin', color: '#AEC6CF', correct: true },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2014/04/blog-post_21.html', label: 'Bush', color: '#C1E1C1', correct: false },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_10.html', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '🥛', label: 'Glass Bin', color: '#AEC6CF', correct: true },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#C1E1C1', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 9: Fish Bones (Food Waste)
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_21.png', // Fish bone
+                    object: '🐟',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_13.png', label: 'Recycle', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_14.png', label: 'Compost', color: '#AEC6CF', correct: true },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_10.html', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
+                        { id: 'zone-3', emoji: '🌱', label: 'Compost', color: '#AEC6CF', correct: true },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 10: Paper
                 {
-                    object: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_23.png', // Paper
+                    object: '📄',
                     zones: [
-                        { id: 'zone-1', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_11.html', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'https://www.irasutoya.com/m/illust/2015/05/blog-post_13.png', label: 'Recycle', color: '#C1E1C1', correct: true },
-                        { id: 'zone-3', img: 'https://www.irasutoya.com/m/illust/2014/04/blog-post_21.html', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', img: 'https://www.irasutoya.com/m/illust/2013/04/blog-post_10.html', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 }
             ]
@@ -503,6 +496,8 @@
         function goHome() {
             currentLevel = 0;
             initLevel(0);
+            // You can also redirect to homepage:
+            // window.location.href = 'index.html';
         }
 
         function openAbout() {
@@ -513,6 +508,7 @@
             aboutModal.style.display = 'none';
         }
 
+        // Close about modal when clicking outside
         aboutModal.addEventListener('click', (e) => {
             if (e.target === aboutModal) closeAbout();
         });
@@ -527,26 +523,31 @@
             levelIndicator.textContent = `Level ${levelIndex + 1}`;
             progressText.textContent = `Level ${levelIndex + 1} of ${CONFIG.LEVELS.length}`;
             
-            // Setup Zones
             level.zones.forEach(zoneConfig => {
                 const zone = document.getElementById(zoneConfig.id);
                 const label = document.getElementById(`label-${zoneConfig.id.split('-')[1]}`);
                 
                 zone.style.backgroundColor = zoneConfig.color;
                 
-                // Render Zone Image using Irasutoya
-                zone.innerHTML = `
-                    <div class="zone-img-container">
-                        <img src="${zoneConfig.img}" alt="${zoneConfig.label}" draggable="false">
-                    </div>
-                    <span class="label">${zoneConfig.label}</span>
-                `;
+                if (CONFIG.USE_IMAGES) {
+                    zone.style.backgroundImage = `url(${zoneConfig.emoji})`;
+                    label.textContent = zoneConfig.label;
+                } else {
+                    zone.innerHTML = `
+                        <span style="font-size: 6vmin;">${zoneConfig.emoji}</span>
+                        <span class="label">${zoneConfig.label}</span>
+                    `;
+                }
                 
                 zone.dataset.correct = zoneConfig.correct;
             });
             
-            // Setup Draggable Object
-            obj.innerHTML = `<img src="${level.object}" alt="Object" draggable="false">`;
+            if (CONFIG.USE_IMAGES) {
+                obj.style.backgroundImage = `url(${level.object})`;
+                obj.textContent = '';
+            } else {
+                obj.textContent = level.object;
+            }
             
             resetObject();
         }
@@ -558,6 +559,7 @@
         obj.addEventListener('pointerdown', (e) => {
             isDragging = true;
             obj.classList.add('dragging');
+            obj.style.transition = 'none';
             
             const gameAreaRect = gameArea.getBoundingClientRect();
             const objRect = obj.getBoundingClientRect();
@@ -624,6 +626,7 @@
             
             if (droppedZone) {
                 const isCorrect = droppedZone.dataset.correct === 'true';
+                playSound(isCorrect ? 'correct' : 'incorrect');
                 showModal(isCorrect);
             }
             
@@ -651,6 +654,7 @@
                 
                 if (currentLevel >= CONFIG.LEVELS.length - 1) {
                     nextBtn.textContent = '🏆 Play Again';
+                    playSound('win');
                 } else {
                     nextBtn.textContent = 'Next Level ➡️';
                 }
@@ -678,6 +682,14 @@
         function retryLevel() {
             closeModal();
             resetObject();
+        }
+
+        function playSound(type) {
+            const soundPath = CONFIG.SOUNDS[type];
+            if (soundPath) {
+                const audio = new Audio(soundPath);
+                audio.play().catch(e => console.log('Sound play failed:', e));
+            }
         }
 
         /* ============================================
