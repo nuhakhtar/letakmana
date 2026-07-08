@@ -42,8 +42,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
-            background: rgba(255,255,255,0.95);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            background: rgba(255,255,255,0.98);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             position: relative;
             z-index: 10;
         }
@@ -67,6 +67,11 @@
             transform: scale(0.95);
         }
 
+        #logo img {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
         #header-title {
             text-align: center;
             flex: 1;
@@ -74,8 +79,9 @@
 
         #header-title h1 {
             color: #FF6B6B;
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 2px;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
         }
 
         #level-indicator {
@@ -85,25 +91,71 @@
         }
 
         #about-btn {
-            font-size: 1.2rem;
-            color: #4ECDC4;
             cursor: pointer;
             text-decoration: none;
-            font-weight: bold;
-            padding: 8px 16px;
-            border-radius: 20px;
-            background: rgba(78, 205, 196, 0.1);
-            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s;
             user-select: none;
+            background: transparent;
+            border: none;
+            padding: 0;
         }
 
         #about-btn:hover {
-            background: rgba(78, 205, 196, 0.3);
             transform: scale(1.05);
         }
 
         #about-btn:active {
             transform: scale(0.95);
+        }
+
+        #about-btn img {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+        }
+
+        #about-btn:hover img {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        /* --- IHSAN ANAK LOGO STYLING --- */
+        .ihsan-logo-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 8px 15px;
+            border-radius: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .ihsan-logo-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .ihsan-logo-text span:first-child {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: white;
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .ihsan-logo-text span:last-child {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #FFD93D;
+            line-height: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .ihsan-heart {
+            color: #FF6B6B;
+            font-size: 1.2rem;
         }
 
         /* --- GAME AREA --- */
@@ -129,6 +181,7 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             transition: all 0.2s;
             border: 4px dashed rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.95);
         }
 
         .zone span.label {
@@ -137,9 +190,10 @@
             font-size: 2.5vmin;
             color: #555;
             font-weight: bold;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             padding: 5px 15px;
             border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         #zone-1 { top: 8%; left: 5%; }
@@ -296,15 +350,23 @@
     </style>
 </head>
 <body>
-<!-- v0.5 test -->
     <!-- HEADER -->
     <div id="header">
-        <a id="logo" onclick="goHome()" title="Go to Homepage"><img src="logo.png" alt="Logo" width="100" height="100"></a>
+        <a id="logo" onclick="goHome()" title="Go to Homepage">
+            <img src="logo.png" alt="Logo" width="80" height="80">
+        </a>
         <div id="header-title">
             <h1>Letak Mana?</h1>
             <div id="level-indicator">Level 1</div>
         </div>
-        <a id="about-btn" onclick="openAbout()"><img src="ihsananak.png" alt="About Us" width="100" height="100"></a>
+        <button id="about-btn" onclick="openAbout()">
+            <div class="ihsan-logo-container">
+                <div class="ihsan-logo-text">
+                    <span>Ihsan</span>
+                    <span>Anak <span class="ihsan-heart">❤️</span></span>
+                </div>
+            </div>
+        </button>
     </div>
 
     <!-- GAME AREA -->
@@ -313,7 +375,7 @@
         <div class="zone" id="zone-2"><span class="label" id="label-2">Zone 2</span></div>
         <div class="zone" id="zone-3"><span class="label" id="label-3">Zone 3</span></div>
         <div class="zone" id="zone-4"><span class="label" id="label-4">Zone 4</span></div>
-        <div id="draggable">🗑️</div>
+        <div id="draggable">✏️</div>
     </div>
 
     <!-- PROGRESS -->
@@ -337,16 +399,16 @@
         <div class="modal-content">
             <h2>About Us 🌟</h2>
             <p>
-                <strong>Where Does It Go?</strong> is a fun educational game designed to help children learn about proper waste sorting and environmental responsibility.
+                <strong>Letak Mana?</strong> is a fun educational game designed to help Malaysian children learn about tidiness and putting things where they belong.
             </p>
             <p>
-                🎯 <strong>How to play:</strong> Drag the object in the middle to the correct zone. Only one zone is correct!
+                🎯 <strong>How to play:</strong> Drag the object in the middle to the correct place. Only one zone is correct!
             </p>
             <p>
-                🌍 <strong>Our mission:</strong> Teaching kids early about recycling, composting, and keeping our planet clean through interactive play.
+                🏠 <strong>Our mission:</strong> Teaching kids early about being organized, tidy, and responsible through interactive play.
             </p>
             <p>
-                 Made with love for curious little minds!
+                Made with love by Ihsan Anak for curious little minds!
             </p>
             <button class="close-btn" onclick="closeAbout()">Got it! 👍</button>
         </div>
@@ -354,7 +416,7 @@
 
     <script>
         /* ============================================
-           CONFIGURATION - 10 SCENES
+           CONFIGURATION - 10 SCENES (TIDINESS THEME)
            ============================================ */
         
         const CONFIG = {
@@ -367,104 +429,104 @@
             },
             
             LEVELS: [
-                // Scene 1: Basic Trash
+                // Scene 1: Pencil in Pencil Case
                 {
-                    object: '🗑️',
+                    object: '✏️',
                     zones: [
-                        { id: 'zone-1', emoji: '', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '', label: 'Bag', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trashbin', color: '#FDFD96', correct: true }
+                        { id: 'zone-1', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-2', emoji: '✏️', label: 'Pencil Case', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '🍽️', label: 'Dining Table', color: '#FFD1DC', correct: false },
+                        { id: 'zone-4', emoji: '🛏️', label: 'Bed', color: '#AEC6CF', correct: false }
                     ]
                 },
-                // Scene 2: Recycling Cardboard
+                // Scene 2: Shoes on Shoe Rack
                 {
-                    object: '📦',
+                    object: '👟',
                     zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: true },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
+                        { id: 'zone-1', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '🗄️', label: 'Shoe Rack', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-4', emoji: '🍽️', label: 'Dining Table', color: '#AEC6CF', correct: false }
+                    ]
+                },
+                // Scene 3: Books on Bookshelf
+                {
+                    object: '📚',
+                    zones: [
+                        { id: 'zone-1', emoji: '📚', label: 'Bookshelf', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🧸', label: 'Toy Box', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
-                // Scene 3: Eating an Apple
+                // Scene 4: Clothes in Wardrobe
                 {
-                    object: '🍎',
+                    object: '👕',
                     zones: [
-                        { id: 'zone-1', emoji: '😋', label: 'Eat It!', color: '#FFD1DC', correct: true },
-                        { id: 'zone-2', emoji: '🎒', label: 'Bag', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-2', emoji: '🚪', label: 'Wardrobe', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-4', emoji: '🪑', label: 'Chair', color: '#AEC6CF', correct: false }
                     ]
                 },
-                // Scene 4: Composting Banana Peel
-                {
-                    object: '',
-                    zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '🌱', label: 'Compost', color: '#AEC6CF', correct: true },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
-                    ]
-                },
-                // Scene 5: Hazardous Battery
-                {
-                    object: '🔋',
-                    zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '⚠️', label: 'Hazardous', color: '#FFB3BA', correct: true }
-                    ]
-                },
-                // Scene 6: Donating Old Toy
+                // Scene 5: Toys in Toy Box
                 {
                     object: '🧸',
                     zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
+                        { id: 'zone-1', emoji: '📦', label: 'Toy Box', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🍽️', label: 'Dining Table', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                },
+                // Scene 6: Plates in Kitchen
+                {
+                    object: '🍽️',
+                    zones: [
+                        { id: 'zone-1', emoji: '🗄️', label: 'Kitchen Cabinet', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🛏️', label: 'Bedroom', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🛋️', label: 'Living Room', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                    ]
+                },
+                // Scene 7: School Bag on Hook
+                {
+                    object: '🎒',
+                    zones: [
+                        { id: 'zone-1', emoji: '🪝', label: 'Bag Hook', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🎁', label: 'Donate', color: '#C1E1C1', correct: true }
+                        { id: 'zone-3', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-4', emoji: '🍽️', label: 'Dining Table', color: '#AEC6CF', correct: false }
                     ]
                 },
-                // Scene 7: Garden Leaves
+                // Scene 8: Rice Bowl in Kitchen
                 {
-                    object: '🍂',
+                    object: '🍚',
                     zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '🌱', label: 'Compost', color: '#AEC6CF', correct: true },
+                        { id: 'zone-1', emoji: '🍽️', label: 'Kitchen', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🛏️', label: 'Bedroom', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🛋️', label: 'Living Room', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
-                // Scene 8: Glass Bottle
+                // Scene 9: Toothbrush in Bathroom
                 {
-                    object: '🍾',
+                    object: '🪥',
                     zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '🥛', label: 'Glass Bin', color: '#AEC6CF', correct: true },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#C1E1C1', correct: false },
+                        { id: 'zone-1', emoji: '🚿', label: 'Bathroom', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🍽️', label: 'Dining Table', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🛏️', label: 'Bedroom', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
                     ]
                 },
-                // Scene 9: Fish Bones (Food Waste)
+                // Scene 10: Keys on Key Holder
                 {
-                    object: '🐟',
+                    object: '🔑',
                     zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: false },
-                        { id: 'zone-3', emoji: '🌱', label: 'Compost', color: '#AEC6CF', correct: true },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
-                    ]
-                },
-                // Scene 10: Paper
-                {
-                    object: '📄',
-                    zones: [
-                        { id: 'zone-1', emoji: '👄', label: 'Mouth', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '♻️', label: 'Recycle', color: '#C1E1C1', correct: true },
-                        { id: 'zone-3', emoji: '🌿', label: 'Bush', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '️', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '🗝️', label: 'Key Holder', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-3', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-4', emoji: '🍽️', label: 'Dining Table', color: '#AEC6CF', correct: false }
                     ]
                 }
             ]
@@ -496,8 +558,6 @@
         function goHome() {
             currentLevel = 0;
             initLevel(0);
-            // You can also redirect to homepage:
-            // window.location.href = 'index.html';
         }
 
         function openAbout() {
