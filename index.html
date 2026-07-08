@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Letak Mana? 🎮</title>
+    <link rel="icon" type="image/png" href="logo.png">
     <style>
         * {
             margin: 0;
@@ -46,6 +47,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             position: relative;
             z-index: 10;
+            gap: 20px;
         }
 
         #logo {
@@ -56,6 +58,7 @@
             gap: 8px;
             transition: transform 0.2s;
             user-select: none;
+            flex-shrink: 0;
         }
 
         #logo:hover {
@@ -71,12 +74,21 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
+        #header-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            max-width: 600px;
+        }
+
         #header-title {
             text-align: center;
-            flex: 1;
             cursor: pointer;
             transition: transform 0.2s;
             user-select: none;
+            width: 100%;
         }
 
         #header-title:hover {
@@ -98,6 +110,36 @@
             font-size: 1.1rem;
             color: #4ECDC4;
             font-weight: bold;
+        }
+
+        #header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        #language-btn {
+            background: rgba(78, 205, 196, 0.1);
+            border: 2px solid #4ECDC4;
+            color: #4ECDC4;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        #language-btn:hover {
+            background: rgba(78, 205, 196, 0.3);
+            transform: scale(1.05);
+        }
+
+        #language-btn:active {
+            transform: scale(0.95);
         }
 
         #about-btn {
@@ -327,13 +369,18 @@
         <a id="logo" href="https://ihsanku.org" title="Go to Homepage">
             <img src="logo.png" alt="Logo" width="80" height="80">
         </a>
-        <div id="header-title" onclick="goHome()">
-            <h1>Letak Mana?</h1>
-            <div id="level-indicator">Level 1</div>
+        <div id="header-center">
+            <div id="header-title" onclick="goHome()">
+                <h1 id="game-title">Letak Mana?</h1>
+                <div id="level-indicator">Level 1</div>
+            </div>
         </div>
-        <a id="about-btn" href="https://ihsananak.com">
-            <img src="ihsananak.png" alt="About Us" width="200" height="100">
-        </a>
+        <div id="header-right">
+            <button id="language-btn" onclick="toggleLanguage()">BM</button>
+            <a id="about-btn" href="https://ihsananak.org">
+                <img src="ihsananak.png" alt="About Us" width="200" height="100">
+            </a>
+        </div>
     </div>
 
     <!-- GAME AREA -->
@@ -364,24 +411,101 @@
     <!-- ABOUT US MODAL -->
     <div id="about-modal" class="modal-overlay">
         <div class="modal-content">
-            <h2>About Us 🌟</h2>
-            <p>
+            <h2 id="about-title">About Us 🌟</h2>
+            <p id="about-p1">
                 <strong>Letak Mana?</strong> is a fun educational game designed to help Malaysian children learn about tidiness and putting things where they belong.
             </p>
-            <p>
+            <p id="about-p2">
                 🎯 <strong>How to play:</strong> Drag the object in the middle to the correct place. Only one zone is correct!
             </p>
-            <p>
+            <p id="about-p3">
                 🏠 <strong>Our mission:</strong> Teaching kids early about being organized, tidy, and responsible through interactive play.
             </p>
-            <p>
+            <p id="about-p4">
                 Made with love by Ihsan Anak for curious little minds!
             </p>
-            <button class="close-btn" onclick="closeAbout()">Got it! 👍</button>
+            <button class="close-btn" id="about-close" onclick="closeAbout()">Got it! 👍</button>
         </div>
     </div>
 
     <script>
+        /* ============================================
+           TRANSLATIONS
+           ============================================ */
+        
+        const translations = {
+            en: {
+                gameTitle: 'Letak Mana?',
+                level: 'Level',
+                of: 'of',
+                correct: '🎉 Correct! Great Job!',
+                wrong: '❌ Wrong! Try Again!',
+                nextLevel: 'Next Level ➡️',
+                playAgain: '🏆 Play Again',
+                tryAgain: 'Try Again 🔄',
+                gotIt: 'Got it! 👍',
+                aboutTitle: 'About Us 🌟',
+                aboutP1: '<strong>Letak Mana?</strong> is a fun educational game designed to help Malaysian children learn about tidiness and putting things where they belong.',
+                aboutP2: '🎯 <strong>How to play:</strong> Drag the object in the middle to the correct place. Only one zone is correct!',
+                aboutP3: '🏠 <strong>Our mission:</strong> Teaching kids early about being organized, tidy, and responsible through interactive play.',
+                aboutP4: 'Made with love by Ihsan Anak for curious little minds!',
+                zones: {
+                    trash: 'Trash',
+                    pencilCase: 'Pencil Case',
+                    diningTable: 'Dining Table',
+                    bed: 'Bed',
+                    shoeRack: 'Shoe Rack',
+                    bookshelf: 'Bookshelf',
+                    toyBox: 'Toy Box',
+                    wardrobe: 'Wardrobe',
+                    chair: 'Chair',
+                    kitchenCabinet: 'Kitchen Cabinet',
+                    bedroom: 'Bedroom',
+                    livingRoom: 'Living Room',
+                    bagHook: 'Bag Hook',
+                    kitchen: 'Kitchen',
+                    bathroom: 'Bathroom',
+                    keyHolder: 'Key Holder'
+                }
+            },
+            ms: {
+                gameTitle: 'Letak Mana?',
+                level: 'Tahap',
+                of: 'daripada',
+                correct: '🎉 Tahniah! Bagus!',
+                wrong: '❌ Salah! Cuba Lagi!',
+                nextLevel: 'Tahap Seterusnya ➡️',
+                playAgain: '🏆 Main Lagi',
+                tryAgain: 'Cuba Lagi 🔄',
+                gotIt: 'Faham! 👍',
+                aboutTitle: 'Mengenai Kami 🌟',
+                aboutP1: '<strong>Letak Mana?</strong> ialah permainan pendidikan yang menyeronokkan untuk membantu kanak-kanak Malaysia belajar tentang kemas dan meletakkan barang di tempat yang betul.',
+                aboutP2: '🎯 <strong>Cara bermain:</strong> Seret objek di tengah ke tempat yang betul. Hanya satu zon yang betul!',
+                aboutP3: '🏠 <strong>Misi kami:</strong> Mengajar kanak-kanak awal tentang menjadi teratur, kemas, dan bertanggungjawab melalui permainan interaktif.',
+                aboutP4: 'Dibuat dengan kasih sayang oleh Ihsan Anak untuk minda kecil yang ingin tahu!',
+                zones: {
+                    trash: 'Sampah',
+                    pencilCase: 'Kotak Pensil',
+                    diningTable: 'Meja Makan',
+                    bed: 'Katil',
+                    shoeRack: 'Rak Kasut',
+                    bookshelf: 'Rak Buku',
+                    toyBox: 'Kotak Mainan',
+                    wardrobe: 'Almari Pakaian',
+                    chair: 'Kerusi',
+                    kitchenCabinet: 'Kabinet Dapur',
+                    bedroom: 'Bilik Tidur',
+                    livingRoom: 'Ruang Tamu',
+                    bagHook: 'Cangkuk Beg',
+                    kitchen: 'Dapur',
+                    bathroom: 'Bilik Air',
+                    keyHolder: 'Pemegang Kunci'
+                }
+            }
+        };
+
+        let currentLang = 'en';
+        
         /* ============================================
            CONFIGURATION - 10 SCENES (TIDINESS THEME)
            ============================================ */
@@ -400,100 +524,100 @@
                 {
                     object: '✏️',
                     zones: [
-                        { id: 'zone-1', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
-                        { id: 'zone-2', emoji: '✏️', label: 'Pencil Case', color: '#C1E1C1', correct: true },
-                        { id: 'zone-3', emoji: '🍽️', label: 'Dining Table', color: '#FFD1DC', correct: false },
-                        { id: 'zone-4', emoji: '🛏️', label: 'Bed', color: '#AEC6CF', correct: false }
+                        { id: 'zone-1', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-2', emoji: '✏️', labelKey: 'pencilCase', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '🍽️', labelKey: 'diningTable', color: '#FFD1DC', correct: false },
+                        { id: 'zone-4', emoji: '🛏️', labelKey: 'bed', color: '#AEC6CF', correct: false }
                     ]
                 },
                 // Scene 2: Shoes on Shoe Rack
                 {
                     object: '👟',
                     zones: [
-                        { id: 'zone-1', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '🗄️', label: 'Shoe Rack', color: '#C1E1C1', correct: true },
-                        { id: 'zone-3', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
-                        { id: 'zone-4', emoji: '🍽️', label: 'Dining Table', color: '#AEC6CF', correct: false }
+                        { id: 'zone-1', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '🗄️', labelKey: 'shoeRack', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-4', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false }
                     ]
                 },
                 // Scene 3: Books on Bookshelf
                 {
                     object: '📚',
                     zones: [
-                        { id: 'zone-1', emoji: '📚', label: 'Bookshelf', color: '#C1E1C1', correct: true },
-                        { id: 'zone-2', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-3', emoji: '🧸', label: 'Toy Box', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '📚', labelKey: 'bookshelf', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🧸', labelKey: 'toyBox', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 4: Clothes in Wardrobe
                 {
                     object: '👕',
                     zones: [
-                        { id: 'zone-1', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
-                        { id: 'zone-2', emoji: '🚪', label: 'Wardrobe', color: '#C1E1C1', correct: true },
-                        { id: 'zone-3', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-4', emoji: '🪑', label: 'Chair', color: '#AEC6CF', correct: false }
+                        { id: 'zone-1', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-2', emoji: '🚪', labelKey: 'wardrobe', color: '#C1E1C1', correct: true },
+                        { id: 'zone-3', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-4', emoji: '🪑', labelKey: 'chair', color: '#AEC6CF', correct: false }
                     ]
                 },
                 // Scene 5: Toys in Toy Box
                 {
                     object: '🧸',
                     zones: [
-                        { id: 'zone-1', emoji: '📦', label: 'Toy Box', color: '#C1E1C1', correct: true },
-                        { id: 'zone-2', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-3', emoji: '🍽️', label: 'Dining Table', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '📦', labelKey: 'toyBox', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 6: Plates in Kitchen
                 {
                     object: '🍽️',
                     zones: [
-                        { id: 'zone-1', emoji: '🗄️', label: 'Kitchen Cabinet', color: '#C1E1C1', correct: true },
-                        { id: 'zone-2', emoji: '🛏️', label: 'Bedroom', color: '#FFD1DC', correct: false },
-                        { id: 'zone-3', emoji: '🛋️', label: 'Living Room', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '🗄️', labelKey: 'kitchenCabinet', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🛏️', labelKey: 'bedroom', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🛋️', labelKey: 'livingRoom', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 7: School Bag on Hook
                 {
                     object: '🎒',
                     zones: [
-                        { id: 'zone-1', emoji: '🪝', label: 'Bag Hook', color: '#C1E1C1', correct: true },
-                        { id: 'zone-2', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
-                        { id: 'zone-3', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-4', emoji: '🍽️', label: 'Dining Table', color: '#AEC6CF', correct: false }
+                        { id: 'zone-1', emoji: '🪝', labelKey: 'bagHook', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-3', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-4', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false }
                     ]
                 },
                 // Scene 8: Rice Bowl in Kitchen
                 {
                     object: '🍚',
                     zones: [
-                        { id: 'zone-1', emoji: '🍽️', label: 'Kitchen', color: '#C1E1C1', correct: true },
-                        { id: 'zone-2', emoji: '🛏️', label: 'Bedroom', color: '#FFD1DC', correct: false },
-                        { id: 'zone-3', emoji: '🛋️', label: 'Living Room', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '🍽️', labelKey: 'kitchen', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🛏️', labelKey: 'bedroom', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🛋️', labelKey: 'livingRoom', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 9: Toothbrush in Bathroom
                 {
                     object: '🪥',
                     zones: [
-                        { id: 'zone-1', emoji: '🚿', label: 'Bathroom', color: '#C1E1C1', correct: true },
-                        { id: 'zone-2', emoji: '🍽️', label: 'Dining Table', color: '#FFD1DC', correct: false },
-                        { id: 'zone-3', emoji: '🛏️', label: 'Bedroom', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-1', emoji: '🚿', labelKey: 'bathroom', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🍽️', labelKey: 'diningTable', color: '#FFD1DC', correct: false },
+                        { id: 'zone-3', emoji: '🛏️', labelKey: 'bedroom', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 10: Keys on Key Holder
                 {
                     object: '🔑',
                     zones: [
-                        { id: 'zone-1', emoji: '🗝️', label: 'Key Holder', color: '#C1E1C1', correct: true },
-                        { id: 'zone-2', emoji: '🗑️', label: 'Trash', color: '#FDFD96', correct: false },
-                        { id: 'zone-3', emoji: '🛏️', label: 'Bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-4', emoji: '🍽️', label: 'Dining Table', color: '#AEC6CF', correct: false }
+                        { id: 'zone-1', emoji: '🗝️', labelKey: 'keyHolder', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-3', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-4', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false }
                     ]
                 }
             ]
@@ -517,6 +641,53 @@
         const progressText = document.getElementById('progress-text');
         const nextBtn = document.getElementById('next-btn');
         const aboutModal = document.getElementById('about-modal');
+
+        /* ============================================
+           LANGUAGE FUNCTIONS
+           ============================================ */
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ms' : 'en';
+            document.getElementById('language-btn').textContent = currentLang === 'en' ? 'BM' : 'EN';
+            updateTexts();
+            initLevel(currentLevel); // Re-init to update zone labels
+        }
+
+        function updateTexts() {
+            const t = translations[currentLang];
+            
+            document.getElementById('game-title').textContent = t.gameTitle;
+            document.getElementById('about-title').innerHTML = t.aboutTitle;
+            document.getElementById('about-p1').innerHTML = t.aboutP1;
+            document.getElementById('about-p2').innerHTML = t.aboutP2;
+            document.getElementById('about-p3').innerHTML = t.aboutP3;
+            document.getElementById('about-p4').innerHTML = t.aboutP4;
+            document.getElementById('about-close').textContent = t.gotIt;
+            
+            // Update progress text
+            updateProgressText();
+            
+            // Update modal if visible
+            if (modal.style.display === 'flex') {
+                const isCorrect = modalBox.classList.contains('correct');
+                modalText.textContent = isCorrect ? t.correct : t.wrong;
+                if (currentLevel >= CONFIG.LEVELS.length - 1) {
+                    nextBtn.textContent = t.playAgain;
+                } else {
+                    nextBtn.textContent = t.nextLevel;
+                }
+            }
+        }
+
+        function updateProgressText() {
+            const t = translations[currentLang];
+            progressText.textContent = `${t.level} ${currentLevel + 1} ${t.of} ${CONFIG.LEVELS.length}`;
+        }
+
+        function updateLevelIndicator() {
+            const t = translations[currentLang];
+            levelIndicator.textContent = `${t.level} ${currentLevel + 1}`;
+        }
 
         /* ============================================
            HEADER FUNCTIONS
@@ -546,9 +717,10 @@
         
         function initLevel(levelIndex) {
             const level = CONFIG.LEVELS[levelIndex];
+            const t = translations[currentLang];
             
-            levelIndicator.textContent = `Level ${levelIndex + 1}`;
-            progressText.textContent = `Level ${levelIndex + 1} of ${CONFIG.LEVELS.length}`;
+            updateLevelIndicator();
+            updateProgressText();
             
             level.zones.forEach(zoneConfig => {
                 const zone = document.getElementById(zoneConfig.id);
@@ -560,9 +732,11 @@
                     zone.style.backgroundImage = `url(${zoneConfig.emoji})`;
                     label.textContent = zoneConfig.label;
                 } else {
+                    // Use translated label
+                    const labelText = t.zones[zoneConfig.labelKey] || zoneConfig.labelKey;
                     zone.innerHTML = `
                         <span style="font-size: 6vmin;">${zoneConfig.emoji}</span>
-                        <span class="label">${zoneConfig.label}</span>
+                        <span class="label">${labelText}</span>
                     `;
                 }
                 
@@ -675,18 +849,20 @@
             modal.style.display = 'flex';
             modalBox.className = 'modal-content ' + (isCorrect ? 'correct' : 'incorrect');
             
+            const t = translations[currentLang];
+            
             if (isCorrect) {
-                modalText.textContent = '🎉 Correct! Great Job!';
+                modalText.textContent = t.correct;
                 nextBtn.style.display = 'inline-block';
                 
                 if (currentLevel >= CONFIG.LEVELS.length - 1) {
-                    nextBtn.textContent = '🏆 Play Again';
+                    nextBtn.textContent = t.playAgain;
                     playSound('win');
                 } else {
-                    nextBtn.textContent = 'Next Level ➡️';
+                    nextBtn.textContent = t.nextLevel;
                 }
             } else {
-                modalText.textContent = '❌ Wrong! Try Again!';
+                modalText.textContent = t.wrong;
                 nextBtn.style.display = 'none';
             }
         }
@@ -720,7 +896,7 @@
         }
 
         /* ============================================
-           START THE GAME
+           START GAME
            ============================================ */
         
         initLevel(0);
