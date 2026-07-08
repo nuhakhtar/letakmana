@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Letak Mana? 🎮</title>
+    <title>Letak Mana? </title>
     <link rel="icon" type="image/png" href="logo.png">
     <style>
         * {
@@ -47,7 +47,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             position: relative;
             z-index: 10;
-            gap: 20px;
         }
 
         #logo {
@@ -58,7 +57,7 @@
             gap: 8px;
             transition: transform 0.2s;
             user-select: none;
-            flex-shrink: 0;
+            z-index: 11;
         }
 
         #logo:hover {
@@ -74,29 +73,23 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        #header-center {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            max-width: 600px;
-        }
-
         #header-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
             cursor: pointer;
             transition: transform 0.2s;
             user-select: none;
-            width: 100%;
+            z-index: 11;
         }
 
         #header-title:hover {
-            transform: scale(1.05);
+            transform: translateX(-50%) scale(1.05);
         }
 
         #header-title:active {
-            transform: scale(0.95);
+            transform: translateX(-50%) scale(0.95);
         }
 
         #header-title h1 {
@@ -116,7 +109,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            flex-shrink: 0;
+            z-index: 11;
         }
 
         #language-btn {
@@ -369,12 +362,12 @@
         <a id="logo" href="https://ihsanku.org" title="Go to Homepage">
             <img src="logo.png" alt="Logo" width="80" height="80">
         </a>
-        <div id="header-center">
-            <div id="header-title" onclick="goHome()">
-                <h1 id="game-title">Letak Mana?</h1>
-                <div id="level-indicator">Level 1</div>
-            </div>
+        
+        <div id="header-title" onclick="goHome()">
+            <h1 id="game-title">Letak Mana?</h1>
+            <div id="level-indicator">Level 1</div>
         </div>
+        
         <div id="header-right">
             <button id="language-btn" onclick="toggleLanguage()">BM</button>
             <a id="about-btn" href="https://ihsananak.org">
@@ -402,7 +395,7 @@
         <div class="modal-content" id="modal-box">
             <h2 id="modal-text">Yay!</h2>
             <div>
-                <button id="next-btn" onclick="nextLevel()">Next Level ➡️</button>
+                <button id="next-btn" onclick="nextLevel()">Next Level ️</button>
                 <button class="secondary" onclick="retryLevel()">Try Again 🔄</button>
             </div>
         </div>
@@ -438,7 +431,7 @@
                 gameTitle: 'Letak Mana?',
                 level: 'Level',
                 of: 'of',
-                correct: '🎉 Correct! Great Job!',
+                correct: ' Correct! Great Job!',
                 wrong: '❌ Wrong! Try Again!',
                 nextLevel: 'Next Level ➡️',
                 playAgain: '🏆 Play Again',
@@ -475,7 +468,7 @@
                 correct: '🎉 Tahniah! Bagus!',
                 wrong: '❌ Salah! Cuba Lagi!',
                 nextLevel: 'Tahap Seterusnya ➡️',
-                playAgain: '🏆 Main Lagi',
+                playAgain: ' Main Lagi',
                 tryAgain: 'Cuba Lagi 🔄',
                 gotIt: 'Faham! 👍',
                 aboutTitle: 'Mengenai Kami 🌟',
@@ -524,7 +517,7 @@
                 {
                     object: '✏️',
                     zones: [
-                        { id: 'zone-1', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-1', emoji: '️', labelKey: 'trash', color: '#FDFD96', correct: false },
                         { id: 'zone-2', emoji: '✏️', labelKey: 'pencilCase', color: '#C1E1C1', correct: true },
                         { id: 'zone-3', emoji: '🍽️', labelKey: 'diningTable', color: '#FFD1DC', correct: false },
                         { id: 'zone-4', emoji: '🛏️', labelKey: 'bed', color: '#AEC6CF', correct: false }
@@ -535,17 +528,17 @@
                     object: '👟',
                     zones: [
                         { id: 'zone-1', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', emoji: '🗄️', labelKey: 'shoeRack', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', emoji: '️', labelKey: 'shoeRack', color: '#C1E1C1', correct: true },
                         { id: 'zone-3', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
                         { id: 'zone-4', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false }
                     ]
                 },
                 // Scene 3: Books on Bookshelf
                 {
-                    object: '📚',
+                    object: '',
                     zones: [
                         { id: 'zone-1', emoji: '📚', labelKey: 'bookshelf', color: '#C1E1C1', correct: true },
-                        { id: 'zone-2', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
+                        { id: 'zone-2', emoji: '️', labelKey: 'bed', color: '#FFD1DC', correct: false },
                         { id: 'zone-3', emoji: '🧸', labelKey: 'toyBox', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
@@ -566,7 +559,7 @@
                     zones: [
                         { id: 'zone-1', emoji: '📦', labelKey: 'toyBox', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-3', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false },
+                        { id: 'zone-3', emoji: '️', labelKey: 'diningTable', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
@@ -576,7 +569,7 @@
                     zones: [
                         { id: 'zone-1', emoji: '🗄️', labelKey: 'kitchenCabinet', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', emoji: '🛏️', labelKey: 'bedroom', color: '#FFD1DC', correct: false },
-                        { id: 'zone-3', emoji: '🛋️', labelKey: 'livingRoom', color: '#AEC6CF', correct: false },
+                        { id: 'zone-3', emoji: '️', labelKey: 'livingRoom', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
@@ -594,7 +587,7 @@
                 {
                     object: '🍚',
                     zones: [
-                        { id: 'zone-1', emoji: '🍽️', labelKey: 'kitchen', color: '#C1E1C1', correct: true },
+                        { id: 'zone-1', emoji: '️', labelKey: 'kitchen', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', emoji: '🛏️', labelKey: 'bedroom', color: '#FFD1DC', correct: false },
                         { id: 'zone-3', emoji: '🛋️', labelKey: 'livingRoom', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
@@ -606,15 +599,15 @@
                     zones: [
                         { id: 'zone-1', emoji: '🚿', labelKey: 'bathroom', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', emoji: '🍽️', labelKey: 'diningTable', color: '#FFD1DC', correct: false },
-                        { id: 'zone-3', emoji: '🛏️', labelKey: 'bedroom', color: '#AEC6CF', correct: false },
-                        { id: 'zone-4', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
+                        { id: 'zone-3', emoji: '️', labelKey: 'bedroom', color: '#AEC6CF', correct: false },
+                        { id: 'zone-4', emoji: '️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 // Scene 10: Keys on Key Holder
                 {
                     object: '🔑',
                     zones: [
-                        { id: 'zone-1', emoji: '🗝️', labelKey: 'keyHolder', color: '#C1E1C1', correct: true },
+                        { id: 'zone-1', emoji: '️', labelKey: 'keyHolder', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
                         { id: 'zone-3', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
                         { id: 'zone-4', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false }
