@@ -49,7 +49,6 @@
         }
 
         #logo {
-            font-size: 1.8rem;
             cursor: pointer;
             text-decoration: none;
             display: flex;
@@ -75,6 +74,17 @@
         #header-title {
             text-align: center;
             flex: 1;
+            cursor: pointer;
+            transition: transform 0.2s;
+            user-select: none;
+        }
+
+        #header-title:hover {
+            transform: scale(1.05);
+        }
+
+        #header-title:active {
+            transform: scale(0.95);
         }
 
         #header-title h1 {
@@ -118,44 +128,6 @@
 
         #about-btn:hover img {
             box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-        }
-
-        /* --- IHSAN ANAK LOGO STYLING --- */
-        .ihsan-logo-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 8px 15px;
-            border-radius: 15px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .ihsan-logo-text {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .ihsan-logo-text span:first-child {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: white;
-            line-height: 1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .ihsan-logo-text span:last-child {
-            font-size: 1.6rem;
-            font-weight: bold;
-            color: #FFD93D;
-            line-height: 1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .ihsan-heart {
-            color: #FF6B6B;
-            font-size: 1.2rem;
         }
 
         /* --- GAME AREA --- */
@@ -352,21 +324,16 @@
 <body>
     <!-- HEADER -->
     <div id="header">
-        <a id="logo" onclick="goHome()" title="Go to Homepage">
+        <a id="logo" href="https://ihsanku.org" title="Go to Homepage">
             <img src="logo.png" alt="Logo" width="80" height="80">
         </a>
-        <div id="header-title">
+        <div id="header-title" onclick="goHome()">
             <h1>Letak Mana?</h1>
             <div id="level-indicator">Level 1</div>
         </div>
-        <button id="about-btn" onclick="openAbout()">
-            <div class="ihsan-logo-container">
-                <div class="ihsan-logo-text">
-                    <span>Ihsan</span>
-                    <span>Anak <span class="ihsan-heart">❤️</span></span>
-                </div>
-            </div>
-        </button>
+        <a id="about-btn" href="https://ihsananak.com">
+            <img src="ihsananak.png" alt="About Us" width="200" height="100">
+        </a>
     </div>
 
     <!-- GAME AREA -->
