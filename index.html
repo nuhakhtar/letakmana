@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Letak Mana?</title>
+    <title>Letak Mana? 🎮</title>
     <link rel="icon" type="image/png" href="logo.png">
     <style>
         * {
@@ -246,12 +246,12 @@
             font-size: 8vmin;
         }
 
-        /* FIXED: Removed translate(-50%, -50%) so it stays connected to mouse */
+        /* FIXED: No transition during drag for snappy movement */
         #draggable.dragging {
             cursor: grabbing;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             z-index: 100;
-            transition: none; /* Remove transition while dragging for instant response */
+            transition: none !important;
         }
 
         /* --- MODALS --- */
@@ -377,7 +377,7 @@
             <p id="about-p2"></p>
             <p id="about-p3"></p>
             <p id="about-p4"></p>
-            <button class="close-btn" id="about-close" onclick="closeAbout()">Got it! </button>
+            <button class="close-btn" id="about-close" onclick="closeAbout()">Got it! 👍</button>
         </div>
     </div>
 
@@ -393,7 +393,7 @@
                 correct: '🎉 Correct! Great Job!',
                 wrong: '❌ Wrong! Try Again!',
                 nextLevel: 'Next Level ➡️',
-                playAgain: '🏆 Play Again',
+                playAgain: ' Play Again',
                 tryAgain: 'Try Again 🔄',
                 gotIt: 'Got it! 👍',
                 aboutTitle: 'About Us 🌟',
@@ -414,13 +414,13 @@
                 of: 'daripada',
                 correct: '🎉 Tahniah! Bagus!',
                 wrong: '❌ Salah! Cuba Lagi!',
-                nextLevel: 'Tahap Seterusnya ️',
+                nextLevel: 'Tahap Seterusnya ➡️',
                 playAgain: '🏆 Main Lagi',
                 tryAgain: 'Cuba Lagi 🔄',
                 gotIt: 'Faham! 👍',
                 aboutTitle: 'Mengenai Kami 🌟',
                 aboutP1: '<strong>Letak Mana?</strong> ialah permainan pendidikan yang menyeronokkan untuk membantu kanak-kanak Malaysia belajar tentang kemas dan meletakkan barang di tempat yang betul.',
-                aboutP2: ' <strong>Cara bermain:</strong> Seret objek di tengah ke tempat yang betul. Hanya satu zon yang betul!',
+                aboutP2: '🎯 <strong>Cara bermain:</strong> Seret objek di tengah ke tempat yang betul. Hanya satu zon yang betul!',
                 aboutP3: '🏠 <strong>Misi kami:</strong> Mengajar kanak-kanak awal tentang menjadi teratur, kemas, dan bertanggungjawab melalui permainan interaktif.',
                 aboutP4: 'Dibuat dengan kasih sayang oleh Ihsan Anak untuk minda kecil yang ingin tahu!',
                 zones: {
@@ -446,40 +446,40 @@
                         { id: 'zone-1', img: 'images/trash.png', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
                         { id: 'zone-2', img: 'images/pencil-case.png', emoji: '✏️', labelKey: 'pencilCase', color: '#C1E1C1', correct: true },
                         { id: 'zone-3', img: 'images/dining-table.png', emoji: '🍽️', labelKey: 'diningTable', color: '#FFD1DC', correct: false },
-                        { id: 'zone-4', img: 'images/bed.png', emoji: '🛏️', labelKey: 'bed', color: '#AEC6CF', correct: false }
+                        { id: 'zone-4', img: 'images/bed.png', emoji: '️', labelKey: 'bed', color: '#AEC6CF', correct: false }
                     ]
                 },
                 {
-                    object: { img: 'images/shoes.png', emoji: '👟' },
+                    object: { img: 'images/shoes.png', emoji: '' },
                     zones: [
                         { id: 'zone-1', img: 'images/bed.png', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-2', img: 'images/shoe-rack.png', emoji: '👟', labelKey: 'shoeRack', color: '#C1E1C1', correct: true },
+                        { id: 'zone-2', img: 'images/shoe-rack.png', emoji: '🗄️', labelKey: 'shoeRack', color: '#C1E1C1', correct: true },
                         { id: 'zone-3', img: 'images/trash.png', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
                         { id: 'zone-4', img: 'images/dining-table.png', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false }
                     ]
                 },
                 {
-                    object: { img: 'images/books.png', emoji: '' },
+                    object: { img: 'images/books.png', emoji: '📚' },
                     zones: [
-                        { id: 'zone-1', img: 'images/bookshelf.png', emoji: '📚', labelKey: 'bookshelf', color: '#C1E1C1', correct: true },
+                        { id: 'zone-1', img: 'images/bookshelf.png', emoji: '', labelKey: 'bookshelf', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', img: 'images/bed.png', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
                         { id: 'zone-3', img: 'images/toy-box.png', emoji: '🧸', labelKey: 'toyBox', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', img: 'images/trash.png', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 {
-                    object: { img: 'images/clothes.png', emoji: '' },
+                    object: { img: 'images/clothes.png', emoji: '👕' },
                     zones: [
-                        { id: 'zone-1', img: 'images/trash.png', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
+                        { id: 'zone-1', img: 'images/trash.png', emoji: '️', labelKey: 'trash', color: '#FDFD96', correct: false },
                         { id: 'zone-2', img: 'images/wardrobe.png', emoji: '🚪', labelKey: 'wardrobe', color: '#C1E1C1', correct: true },
                         { id: 'zone-3', img: 'images/bed.png', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
-                        { id: 'zone-4', img: 'images/chair.png', emoji: '💺', labelKey: 'chair', color: '#AEC6CF', correct: false }
+                        { id: 'zone-4', img: 'images/chair.png', emoji: '🪑', labelKey: 'chair', color: '#AEC6CF', correct: false }
                     ]
                 },
                 {
-                    object: { img: 'images/teddy.png', emoji: '' },
+                    object: { img: 'images/teddy.png', emoji: '🧸' },
                     zones: [
-                        { id: 'zone-1', img: 'images/toy-box.png', emoji: '📦', labelKey: 'toyBox', color: '#C1E1C1', correct: true },
+                        { id: 'zone-1', img: 'images/toy-box.png', emoji: '', labelKey: 'toyBox', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', img: 'images/bed.png', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
                         { id: 'zone-3', img: 'images/dining-table.png', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', img: 'images/trash.png', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
@@ -490,14 +490,14 @@
                     zones: [
                         { id: 'zone-1', img: 'images/kitchen-cabinet.png', emoji: '🗄️', labelKey: 'kitchenCabinet', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', img: 'images/bedroom.png', emoji: '🛏️', labelKey: 'bedroom', color: '#FFD1DC', correct: false },
-                        { id: 'zone-3', img: 'images/living-room.png', emoji: '', labelKey: 'livingRoom', color: '#AEC6CF', correct: false },
+                        { id: 'zone-3', img: 'images/living-room.png', emoji: '🛋️', labelKey: 'livingRoom', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', img: 'images/trash.png', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 {
-                    object: { img: 'images/school-bag.png', emoji: '' },
+                    object: { img: 'images/school-bag.png', emoji: '🎒' },
                     zones: [
-                        { id: 'zone-1', img: 'images/bag-hook.png', emoji: '🪝', labelKey: 'bagHook', color: '#C1E1C1', correct: true },
+                        { id: 'zone-1', img: 'images/bag-hook.png', emoji: '', labelKey: 'bagHook', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', img: 'images/trash.png', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
                         { id: 'zone-3', img: 'images/bed.png', emoji: '🛏️', labelKey: 'bed', color: '#FFD1DC', correct: false },
                         { id: 'zone-4', img: 'images/dining-table.png', emoji: '🍽️', labelKey: 'diningTable', color: '#AEC6CF', correct: false }
@@ -506,14 +506,14 @@
                 {
                     object: { img: 'images/rice-bowl.png', emoji: '🍚' },
                     zones: [
-                        { id: 'zone-1', img: 'images/kitchen.png', emoji: '🍳', labelKey: 'kitchen', color: '#C1E1C1', correct: true },
+                        { id: 'zone-1', img: 'images/kitchen.png', emoji: '🍽️', labelKey: 'kitchen', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', img: 'images/bedroom.png', emoji: '🛏️', labelKey: 'bedroom', color: '#FFD1DC', correct: false },
                         { id: 'zone-3', img: 'images/living-room.png', emoji: '🛋️', labelKey: 'livingRoom', color: '#AEC6CF', correct: false },
                         { id: 'zone-4', img: 'images/trash.png', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false }
                     ]
                 },
                 {
-                    object: { img: 'images/toothbrush.png', emoji: '🪥' },
+                    object: { img: 'images/toothbrush.png', emoji: '' },
                     zones: [
                         { id: 'zone-1', img: 'images/bathroom.png', emoji: '🚿', labelKey: 'bathroom', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', img: 'images/dining-table.png', emoji: '🍽️', labelKey: 'diningTable', color: '#FFD1DC', correct: false },
@@ -522,7 +522,7 @@
                     ]
                 },
                 {
-                    object: { img: 'images/keys.png', emoji: '' },
+                    object: { img: 'images/keys.png', emoji: '🔑' },
                     zones: [
                         { id: 'zone-1', img: 'images/key-holder.png', emoji: '🗝️', labelKey: 'keyHolder', color: '#C1E1C1', correct: true },
                         { id: 'zone-2', img: 'images/trash.png', emoji: '🗑️', labelKey: 'trash', color: '#FDFD96', correct: false },
@@ -654,11 +654,14 @@
         }
 
         /* ============================================
-           DRAG AND DROP
+           DRAG AND DROP - OPTIMIZED & SNAPPY
            ============================================ */
         obj.addEventListener('pointerdown', (e) => {
             isDragging = true;
             obj.classList.add('dragging');
+            
+            // CRITICAL: Remove ALL transitions immediately for instant response
+            obj.style.transition = 'none';
             
             const gameAreaRect = gameArea.getBoundingClientRect();
             const objRect = obj.getBoundingClientRect();
@@ -666,12 +669,13 @@
             dragOffsetX = e.clientX - objRect.left;
             dragOffsetY = e.clientY - objRect.top;
             
+            // Set position immediately
             obj.style.left = (objRect.left - gameAreaRect.left) + 'px';
             obj.style.top = (objRect.top - gameAreaRect.top) + 'px';
-            // FIXED: Only apply scale, no translate offset so it stays connected to mouse
-            obj.style.transform = 'scale(1.2)'; 
+            obj.style.transform = 'scale(1.2)';
             
             obj.setPointerCapture(e.pointerId);
+            e.preventDefault();
         });
 
         document.addEventListener('pointermove', (e) => {
@@ -679,22 +683,23 @@
             e.preventDefault();
             
             const gameAreaRect = gameArea.getBoundingClientRect();
+            
+            // Direct position update
             obj.style.left = (e.clientX - gameAreaRect.left - dragOffsetX) + 'px';
             obj.style.top = (e.clientY - gameAreaRect.top - dragOffsetY) + 'px';
             
+            // Optimized hover detection
+            const objRect = obj.getBoundingClientRect();
+            const cx = objRect.left + objRect.width / 2;
+            const cy = objRect.top + objRect.height / 2;
+            
             document.querySelectorAll('.zone').forEach(zone => {
                 const zoneRect = zone.getBoundingClientRect();
-                const objRect = obj.getBoundingClientRect();
-                const cx = objRect.left + objRect.width / 2;
-                const cy = objRect.top + objRect.height / 2;
-                
-                if (cx >= zoneRect.left && cx <= zoneRect.right && cy >= zoneRect.top && cy <= zoneRect.bottom) {
-                    zone.classList.add('hover');
-                } else {
-                    zone.classList.remove('hover');
-                }
+                const isHovering = (cx >= zoneRect.left && cx <= zoneRect.right && 
+                                   cy >= zoneRect.top && cy <= zoneRect.bottom);
+                zone.classList.toggle('hover', isHovering);
             });
-        });
+        }, { passive: false });
 
         document.addEventListener('pointerup', (e) => {
             if (!isDragging) return;
@@ -709,7 +714,8 @@
             let droppedZone = null;
             document.querySelectorAll('.zone').forEach(zone => {
                 const zoneRect = zone.getBoundingClientRect();
-                if (cx >= zoneRect.left && cx <= zoneRect.right && cy >= zoneRect.top && cy <= zoneRect.bottom) {
+                if (cx >= zoneRect.left && cx <= zoneRect.right && 
+                    cy >= zoneRect.top && cy <= zoneRect.bottom) {
                     droppedZone = zone;
                 }
             });
@@ -722,6 +728,11 @@
             
             resetObject();
         });
+
+        // Prevent scrolling on touch devices
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) e.preventDefault();
+        }, { passive: false });
 
         /* ============================================
            GAME FUNCTIONS
